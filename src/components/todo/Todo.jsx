@@ -3,12 +3,13 @@ import React, { Component } from 'react';
 import Task from '../Task/Task'
 import Addtask from '../Addnewtask/Addtask'
 import styles from './Todo.module.css'
+import { Col, Container, Row } from 'react-bootstrap';
 
 
 export default class Todo extends Component {
     state = {
-        task:['task1', 'task2', 'task3'],
-        //inputValue:""
+        task:['a1', 'a2'],
+        inputValue:''
         
     }
 
@@ -20,22 +21,40 @@ export default class Todo extends Component {
         });
     }
 
+
     render() {
         const newTask = this.state.task.map((value, index) => {
-            return (<ul className={styles.ul}>< Task task={value} key = {index} /></ul>)
+            return (<Col 
+                         key = {index} >< Task task={value} />
+                    </Col>)
         })
 
+
+
         return (
-            <div >
-                <h1 className={styles.header}>My ToDo List</h1>
-                <Addtask
-                 handleSubmit = {this.handleSubmit}/>
-                 <div> 
+            <Container >
+                <Row>
+                    <Col>
+                        <h1 className={styles.header}>My ToDo List</h1>
+                    </Col>
+                    
+                </Row>
+                <Row>
+                    <Col>
+                        <Addtask
+                             handleSubmit = {this.handleSubmit}
+                             deschandleSubmit = {this.deschandleSubmit}
+                        />
+                     </Col>
+                    
+                </Row>
+                
+                 <Row> 
                     {newTask}
-                 </div>
+                 </Row>
                 
 
-            </div>
+            </Container>
         )
     }
 }

@@ -1,11 +1,26 @@
+import React, { Component } from 'react'
 import styles from './Task.module.css'
 
-const Task = (props) => {
-    const {task} = props;
-    return (
-        <div  className="task">
-            <li className={styles.li}>{task}</li>
-        </div>
-    )
+export default class Task extends Component {
+   
+    render() {
+        const {task} = this.props;
+        return (
+            <div>
+                <div  className="task">
+                  
+                    <li className="list-group-item ">
+                        <div>{task}
+                            {this.props.task.value}
+                            <button
+                                type="button"
+                                className="close">&times;
+                            </button>
+                        </div>
+                    </li> 
+       
+                </div> 
+            </div>
+        )
+    }
 }
-export default Task
