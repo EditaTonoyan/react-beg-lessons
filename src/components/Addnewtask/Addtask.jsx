@@ -26,18 +26,6 @@ export default class Addtask extends Component {
             inputValue:''
         });
     }
-
-
-    handleKeyPress = ({type, key}) => {
-        
-        console.log(key);
-        // if(event.key === 'Enter'){
-        //     this.props.handleSubmit(this.state.inputValue);
-        //     this.setState({
-        //         inputValue:'',
-        //     })
-        // }
-      }
       
 
     render() {
@@ -51,7 +39,7 @@ export default class Addtask extends Component {
                             onChange={this.handlechange} 
                             value={this.state.inputValue}
                             className={styles.input}
-                            onKeyPress={this.handleKeyPress}
+                            onKeyPress={this.handleSub}
                             placeholder="Task..."
                             aria-label="Task"
                             aria-describedby="basic-addon1"
