@@ -7,7 +7,6 @@ export default class Addtask extends Component {
     state = {
         
         inputValue:'',
-        // descInputValue:''
     }
 
     handlechange = (event) => {
@@ -30,27 +29,26 @@ export default class Addtask extends Component {
 
     render() {
         return (
-                    <div className="dispyalflex">
-                        <InputGroup className="mb-3">
-                            <InputGroup.Prepend>
-                            </InputGroup.Prepend>
-                            <FormControl 
-                            type='text'
-                            onChange={this.handlechange} 
-                            value={this.state.inputValue}
-                            className={styles.input}
-                            onKeyPress={this.handleSub}
-                            placeholder="Task..."
-                            aria-label="Task"
-                            aria-describedby="basic-addon1"
-                            />
-                        </InputGroup>
-                        
-                        <Button variant="primary" onClick={this.handleSub}>
-                            ADD
-                        </Button>
-
-                    </div>
+                <InputGroup >
+                    <FormControl 
+                    
+                    type='text'
+                    onChange={this.handlechange} 
+                    value={this.state.inputValue}
+                    className={styles.input}
+                    onKeyPress={this.handleSub}
+                    placeholder="Task..."
+                    />
+                       
+                    <Button 
+                    variant="primary" 
+                    onClick={this.handleSub} 
+                    className="ml-3"
+                    >
+                        ADD
+                    </Button>
+                </InputGroup>
+            
         )
     }
 }
