@@ -4,8 +4,8 @@ import {FormControl,InputGroup,Button} from 'react-bootstrap';
 
 
 export default class Addtask extends Component {
+    
     state = {
-        
         inputValue:'',
     }
 
@@ -28,22 +28,25 @@ export default class Addtask extends Component {
       
 
     render() {
+       const{isAnyTaskChecked}  = this.props
         return (
                 <InputGroup >
                     <FormControl 
                     
-                    type='text'
-                    onChange={this.handlechange} 
-                    value={this.state.inputValue}
-                    className={styles.input}
-                    onKeyPress={this.handleSub}
-                    placeholder="Task..."
+                        type='text'
+                        onChange={this.handlechange} 
+                        value={this.state.inputValue}
+                        className={styles.input}
+                        onKeyPress={this.handleSub}
+                        placeholder="Task..."
+                        disabled = {isAnyTaskChecked}
                     />
                        
                     <Button 
-                    variant="primary" 
-                    onClick={this.handleSub} 
-                    className="ml-3"
+                        variant="primary" 
+                        onClick={this.handleSub} 
+                        className="ml-3"
+                        disabled = {isAnyTaskChecked}
                     >
                         ADD
                     </Button>

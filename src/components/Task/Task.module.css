@@ -1,4 +1,9 @@
 .chbox {
     width: 18%;
     float: right;
+    margin-left: auto
+}
+
+.disabled {
+    background-color: rgba(202, 197, 199, .3);
 }
