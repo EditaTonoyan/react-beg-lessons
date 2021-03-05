@@ -1,16 +1,11 @@
+import { memo } from 'react';
 import React, { Component } from 'react';
 import styles from './Task.module.css';
 import {Card, Button, InputGroup} from 'react-bootstrap'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faTrash, faEdit } from '@fortawesome/free-solid-svg-icons'
 
-const Task = ({
-     task,
-     handleDeletetask,
-     handlecheckedTasks,
-     isAnyTaskChecked,
-     isChecked
-    }) => {
+const Task = ({ task, handleDeletetask, handlecheckedTasks, isAnyTaskChecked, isChecked}) => {
         const classes = [];
         if(isChecked){
             classes.push(styles.disabled)
@@ -22,7 +17,8 @@ const Task = ({
                 <Card className={classes.join(' ')}>
                     <div className={styles.chbox}>
                             <InputGroup.Checkbox 
-                            onClick={() => handlecheckedTasks(task._id)}
+                            onChange={() => handlecheckedTasks(task._id)}
+                            
                             />
                     </div>
                 <Card.Body>
@@ -50,4 +46,4 @@ const Task = ({
         )
     
 }
-export default Task
+export default memo(Task)
