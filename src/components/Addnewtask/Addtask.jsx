@@ -17,6 +17,8 @@ export default class Addtask extends Component {
     }
 
     handleSub = ({key, type}) =>{
+        console.log(key);
+        console.log(type);
         if(!this.state.inputValue||
             (type === 'keypress' && key !== 'Enter'))
                  return;
@@ -28,7 +30,7 @@ export default class Addtask extends Component {
       
 
     render() {
-       const{isAnyTaskChecked}  = this.props
+       const {isAnyTaskChecked}  = this.props
         return (
                 <InputGroup >
                     <FormControl 

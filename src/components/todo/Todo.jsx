@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-// import Addnewtask from '../components/Addnewtask';
 import Task from '../Task/Task'
 import Addtask from '../Addnewtask/Addtask'
 import IdGenerator from '../../Helpers/IdGenerator'
@@ -15,7 +14,8 @@ export default class Todo extends Component {
             {_id:IdGenerator(), title:'task3'},
         ],
         inputValue:'',
-        checkedTasks:new Set()
+        checkedTasks:new Set(),
+        buttonTitle:'Check All'
         
     }
 
@@ -24,12 +24,13 @@ export default class Todo extends Component {
         task.push({title:value, _id:IdGenerator()});
         this.setState({
             task
+
         });
     }
 
     handleDeletetask = (_id) => {
-        // console.log('id',_id)
-        const task = [...this.state.task];
+        console.log('handleDeletetask')
+        let task = [...this.state.task];
         task = task.filter(task => task._id !== _id)
         this.setState({
             task
@@ -38,6 +39,7 @@ export default class Todo extends Component {
     }
 
     handlecheckedTasks = (_id) => {
+        
        const {checkedTasks} = this.state;
        let newSet = checkedTasks;
         if(!newSet.has(_id)){
@@ -51,6 +53,7 @@ export default class Todo extends Component {
     }
     
     handleDeleteCheckedTask = () => {
+        console.log('handleDeleteCheckedTask')
         let task = [...this.state.task];
         const {checkedTasks} = this.state;
          task = task.filter(task => !checkedTasks.has(task._id));
@@ -62,6 +65,27 @@ export default class Todo extends Component {
         
     }
 
+    handleCheckAll = () => {
+        
+        const {task} = this.state;
+        let {buttonTitle} = this.state;
+       
+
+        const checkedTasks = new Set();
+        if(buttonTitle === 'Check All'){
+            buttonTitle = ' Remove Checked';
+            task.filter(task => checkedTasks.add(task._id));
+            
+        }else{
+            buttonTitle = 'Check All';
+        }
+        
+        this.setState({
+            checkedTasks,
+            buttonTitle:buttonTitle
+        })
+        
+    }
 
     render() {
         const {checkedTasks} = this.state;
@@ -73,6 +97,7 @@ export default class Todo extends Component {
                         isAnyTaskChecked = {!!checkedTasks.size}
                         handleDeletetask = {this.handleDeletetask}
                         handlecheckedTasks = {this.handlecheckedTasks}
+                        handleCheckAll = {this.handleCheckAll}
                          />
                     </Col>)
         })
@@ -102,11 +127,20 @@ export default class Todo extends Component {
                  </Row>
                 <Row  className="justify-content-center mt-5">
                     <Button 
-                    variant = "danger"
-                    onClick = {this.handleDeleteCheckedTask}
-                    disabled = {!!!checkedTasks.size}
+                      variant = "danger"
+                      onClick = {this.handleDeleteCheckedTask}
+                      disabled = {!!!checkedTasks.size}
                     >
                         Delete All checked
+                    </Button>
+
+                    <Button 
+                      className="ml-5"
+                      variant="primary"
+                      onClick = {this.handleCheckAll}
+                     
+                    >
+                        {this.state.buttonTitle}
                     </Button>
                 </Row>
             </Container>

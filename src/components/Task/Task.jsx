@@ -1,4 +1,4 @@
-import { memo } from 'react';
+import { memo } from 'react'
 import React, { Component } from 'react';
 import styles from './Task.module.css';
 import {Card, Button, InputGroup} from 'react-bootstrap'
@@ -18,6 +18,7 @@ const Task = ({ task, handleDeletetask, handlecheckedTasks, isAnyTaskChecked, is
                     <div className={styles.chbox}>
                             <InputGroup.Checkbox 
                             onChange={() => handlecheckedTasks(task._id)}
+                            checked = {isChecked}
                             
                             />
                     </div>
@@ -46,4 +47,4 @@ const Task = ({ task, handleDeletetask, handlecheckedTasks, isAnyTaskChecked, is
         )
     
 }
-export default memo(Task)
+export default memo (Task)
