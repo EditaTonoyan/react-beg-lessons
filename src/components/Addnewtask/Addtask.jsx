@@ -1,13 +1,14 @@
 import React, { Component } from 'react'
 import styles from './Addtask.module.css'
 import {FormControl,InputGroup,Button} from 'react-bootstrap';
+import withScreenSizes from '../../hoc/WithScreenSizes'
 
-
-export default class Addtask extends Component {
+class Addtask extends Component {
     
     state = {
         inputValue:'',
-    }
+    }  
+    
 
     handlechange = (event) => {
         const {value} = event.target;
@@ -17,8 +18,7 @@ export default class Addtask extends Component {
     }
 
     handleSub = ({key, type}) =>{
-        console.log(key);
-        console.log(type);
+       
         if(!this.state.inputValue||
             (type === 'keypress' && key !== 'Enter'))
                  return;
@@ -30,6 +30,7 @@ export default class Addtask extends Component {
       
 
     render() {
+        
        const {isAnyTaskChecked}  = this.props
         return (
                 <InputGroup >
@@ -57,3 +58,4 @@ export default class Addtask extends Component {
         )
     }
 }
+export default withScreenSizes(Addtask)

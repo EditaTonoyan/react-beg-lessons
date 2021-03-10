@@ -4,9 +4,10 @@ import Addtask from '../Addnewtask/Addtask'
 import IdGenerator from '../../Helpers/IdGenerator'
 import styles from './Todo.module.css'
 import { Col, Container, Row, Button} from 'react-bootstrap';
+import withScreenSizes from '../../hoc/WithScreenSizes'
 
 
-export default class Todo extends Component {
+class Todo extends Component {
     state = {
         task:[
             {_id:IdGenerator(), title:'task1'},
@@ -29,12 +30,12 @@ export default class Todo extends Component {
     }
 
     handleDeletetask = (_id) => {
-        console.log('handleDeletetask')
         let task = [...this.state.task];
         task = task.filter(task => task._id !== _id)
         this.setState({
             task
         })
+        
    
     }
 
@@ -53,7 +54,6 @@ export default class Todo extends Component {
     }
     
     handleDeleteCheckedTask = () => {
-        console.log('handleDeleteCheckedTask')
         let task = [...this.state.task];
         const {checkedTasks} = this.state;
          task = task.filter(task => !checkedTasks.has(task._id));
@@ -62,33 +62,27 @@ export default class Todo extends Component {
             checkedTasks:new Set()
            
         })
+        this.state.buttonTitle = 'Check All'
         
     }
 
-    handleCheckAll = () => {
-        
-        const {task} = this.state;
-        let {buttonTitle} = this.state;
-       
-
-        const checkedTasks = new Set();
-        if(buttonTitle === 'Check All'){
-            buttonTitle = ' Remove Checked';
-            task.filter(task => checkedTasks.add(task._id));
-            
+    handleToggleCheckAll = () => {
+        const {task} = this.state
+        let checkedTasks = new Set(this.state.checkedTasks)
+        if(task.length === checkedTasks.size){
+            checkedTasks.clear();
         }else{
-            buttonTitle = 'Check All';
+            task.forEach(task => {
+                checkedTasks.add(task._id)
+            });
         }
-        
         this.setState({
-            checkedTasks,
-            buttonTitle:buttonTitle
+            checkedTasks
         })
-        
     }
 
     render() {
-        const {checkedTasks} = this.state;
+        const {checkedTasks,task} = this.state;
         const newTask = this.state.task.map(task => {
             return (<Col className = "mt-3"
                          key = {task._id} >
@@ -99,8 +93,11 @@ export default class Todo extends Component {
                         handlecheckedTasks = {this.handlecheckedTasks}
                         handleCheckAll = {this.handleCheckAll}
                          />
+                         
                     </Col>)
         })
+
+      
 
 
 
@@ -115,7 +112,7 @@ export default class Todo extends Component {
                 <Row>
                     <Col>
                         <Addtask
-                            isAnyTaskChecked = {!!checkedTasks.size}
+                             isAnyTaskChecked = {!!checkedTasks.size}
                              handleSubmit = {this.handleSubmit}
                         />
                      </Col>
@@ -127,23 +124,32 @@ export default class Todo extends Component {
                  </Row>
                 <Row  className="justify-content-center mt-5">
                     <Button 
+                     style = {{display:!!task.length ? 'block' : 'none' }}
                       variant = "danger"
                       onClick = {this.handleDeleteCheckedTask}
                       disabled = {!!!checkedTasks.size}
                     >
                         Delete All checked
                     </Button>
-
+                    
+                
                     <Button 
+                      style = {{display:!!task.length ? 'block' : 'none' }}
                       className="ml-5"
                       variant="primary"
-                      onClick = {this.handleCheckAll}
-                     
+                      onClick = {this.handleToggleCheckAll}
+                      disabled = {this.state.checkedTasks == ''}
+                 
                     >
-                        {this.state.buttonTitle}
+                        {
+                          task.length === checkedTasks.size ? "Remove Checked": "Check All"
+                        }
                     </Button>
+    
                 </Row>
             </Container>
         )
     }
 }
+
+export default withScreenSizes(Todo);
