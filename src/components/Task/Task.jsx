@@ -4,9 +4,7 @@ import styles from './Task.module.css';
 import {Card, Button, InputGroup} from 'react-bootstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faTrash, faEdit } from '@fortawesome/free-solid-svg-icons';
-import withScreenSizes from '../../hoc/WithScreenSizes';
 import PropTypes from 'prop-types';
-import { string } from 'prop-types';
 
 const Task = ({ 
                 task, 
@@ -15,6 +13,7 @@ const Task = ({
                 isAnyTaskChecked, 
                 isChecked, 
                 ...props}) => {
+
         const classes = [];
         if(isChecked){
             classes.push(styles.disabled)
@@ -22,7 +21,6 @@ const Task = ({
   
     
         return (
-     
                 <Card className={classes.join(' ')}>
                     <div className={styles.chbox}>
                             <InputGroup.Checkbox 
@@ -31,35 +29,35 @@ const Task = ({
                             
                             />
                     </div>
-                <Card.Body>
-                    <Card.Title  style={{color:"#495057"}}>
-                        <p>{task.title}</p>
-                    </Card.Title>
-                    <Button
-                        variant="danger"
-                        onClick={(e) => handleDeletetask(task._id)}
-                        disabled={isAnyTaskChecked}
-                    >
-                        <FontAwesomeIcon icon={faTrash} />
-                    </Button>
-                        
-                    <Button 
-                        variant="warning" 
-                        className="ml-3"
-                        disabled={isAnyTaskChecked}
-                    >
-                        <FontAwesomeIcon icon={faEdit} />
-                    </Button>
-                   
-                </Card.Body>
+                    <Card.Body>
+                        <Card.Title  style={{color:"#495057"}}>{task.title} </Card.Title>
+                        <Card.Text  style={{color:"#495057"}} className="mb-3">{task.description}</Card.Text>
+                        <Button
+                            variant="danger"
+                            onClick={(e) => handleDeletetask(task._id)}
+                            disabled={isAnyTaskChecked}
+                        >
+                            <FontAwesomeIcon icon={faTrash} />
+                        </Button>
+                            
+                        <Button 
+                            variant="warning" 
+                            className="ml-3"
+                            disabled={isAnyTaskChecked}
+                        >
+                            <FontAwesomeIcon icon={faEdit} />
+                        </Button>
+                    
+                    </Card.Body>
                 </Card>
         )
     
 }
 Task.propTypes = {
     task:PropTypes.shape({
-        _id:PropTypes.string,
-        title:PropTypes.string,
+        _id:PropTypes.string.isRequired,
+        title:PropTypes.string.isRequired,
+        description:PropTypes.string.isRequired,
     }),
     handleDeletetask:PropTypes.func,
     handlecheckedTasks:PropTypes.func,
@@ -68,4 +66,4 @@ Task.propTypes = {
 
 
 }
-export default memo (withScreenSizes(Task))
+export default memo (Task)

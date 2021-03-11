@@ -1,30 +1,39 @@
 import React, { Component } from 'react'
 import styles from './Addtask.module.css'
-import {FormControl,InputGroup,Button} from 'react-bootstrap';
-import withScreenSizes from '../../hoc/WithScreenSizes'
+import {FormControl,Button,Form} from 'react-bootstrap';
 
 class Addtask extends Component {
     
     state = {
-        inputValue:'',
-    }  
+       title:'',
+       description:''
+    } 
     
 
     handlechange = (event) => {
-        const {value} = event.target;
+        const {value, name} = event.target;
         this.setState({
-            inputValue:value
+           [name]:value
         });
     }
 
-    handleSub = ({key, type}) =>{
-       
-        if(!this.state.inputValue||
-            (type === 'keypress' && key !== 'Enter'))
+    handleSub = ({key, type}) =>{  
+        const {title,description} = this.state     
+        if(!title || !description ||
+            (type === 'keypress' && key !== 'Enter')
+            )
                  return;
-        this.props.handleSubmit(this.state.inputValue);
+
+
+            const inputsValues = {
+                title:title,
+                description:description
+            }
+        this.props.handleSubmit(inputsValues);
+
         this.setState({
-            inputValue:''
+            title:'',
+            description:''
         });
     }
       
@@ -32,30 +41,41 @@ class Addtask extends Component {
     render() {
         
        const {isAnyTaskChecked}  = this.props
-        return (
-                <InputGroup >
+       const{title, description} = this.state
+         return (
+               <>
                     <FormControl 
-                    
+                        name='title'
                         type='text'
                         onChange={this.handlechange} 
                         value={this.state.inputValue}
                         className={styles.input}
                         onKeyPress={this.handleSub}
-                        placeholder="Task..."
+                        placeholder="Title"
                         disabled = {isAnyTaskChecked}
+                        value={title}
                     />
-                       
+                     <Form.Control 
+                        name='description'
+                        placeholder="description"
+                        onChange={this.handlechange}
+                        className={styles.input }
+                        as="textarea" 
+                        rows={3}
+                        disabled = {isAnyTaskChecked}
+                        value={description}
+                      />
                     <Button 
                         variant="primary" 
                         onClick={this.handleSub} 
-                        className="ml-3"
-                        disabled = {isAnyTaskChecked}
+                        className={styles.button}
+                        disabled = {isAnyTaskChecked || !title || !description}
                     >
                         ADD
                     </Button>
-                </InputGroup>
+              </>
             
         )
     }
 }
-export default withScreenSizes(Addtask)
+export default Addtask

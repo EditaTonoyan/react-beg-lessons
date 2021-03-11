@@ -4,31 +4,45 @@ import Addtask from '../Addnewtask/Addtask'
 import IdGenerator from '../../Helpers/IdGenerator'
 import styles from './Todo.module.css'
 import { Col, Container, Row, Button} from 'react-bootstrap';
-import withScreenSizes from '../../hoc/WithScreenSizes'
 
 
 class Todo extends Component {
     state = {
         task:[
-            {_id:IdGenerator(), title:'task1'},
-            {_id:IdGenerator(), title:'task2'},
-            {_id:IdGenerator(), title:'task3'},
+            {
+                _id:IdGenerator(),
+                 title:'task1',
+                 description:"taskDesc1"
+            },
+
+            {
+                _id:IdGenerator(), 
+                title:'task2', 
+                description:"taskDesc2"
+            },
+
+            {
+                _id:IdGenerator(), 
+                title:'task3', 
+                description:"taskDesc13"
+            },
         ],
         inputValue:'',
         checkedTasks:new Set(),
-        buttonTitle:'Check All'
+        onHide:true
         
     }
 
-    handleSubmit = (value) =>{
+    handleSubmit = (inputsValues) =>{
         const task = [...this.state.task];
-        task.push({title:value, _id:IdGenerator()});
+        task.push({
+                 ...inputsValues,
+                _id:IdGenerator()});
         this.setState({
             task
 
         });
     }
-
     handleDeletetask = (_id) => {
         let task = [...this.state.task];
         task = task.filter(task => task._id !== _id)
@@ -38,7 +52,6 @@ class Todo extends Component {
         
    
     }
-
     handlecheckedTasks = (_id) => {
         
        const {checkedTasks} = this.state;
@@ -65,7 +78,6 @@ class Todo extends Component {
         this.state.buttonTitle = 'Check All'
         
     }
-
     handleToggleCheckAll = () => {
         const {task} = this.state
         let checkedTasks = new Set(this.state.checkedTasks)
@@ -128,6 +140,8 @@ class Todo extends Component {
                       variant = "danger"
                       onClick = {this.handleDeleteCheckedTask}
                       disabled = {!!!checkedTasks.size}
+                     
+                      
                     >
                         Delete All checked
                     </Button>
@@ -145,11 +159,13 @@ class Todo extends Component {
                           task.length === checkedTasks.size ? "Remove Checked": "Check All"
                         }
                     </Button>
-    
+
                 </Row>
+
+                
             </Container>
         )
     }
 }
 
-export default withScreenSizes(Todo);
+export default Todo;

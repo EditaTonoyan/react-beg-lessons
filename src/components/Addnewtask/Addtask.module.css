@@ -1,29 +1,12 @@
 
 .input{
+    margin-top: 10px;
     border: none;
-    
     border-bottom: 2px solid rgb(0, 110, 255);
 }
 .button {
-    display: inline-block;
-    padding: 5px 15px;
-    font-size: 20px;
-    cursor: pointer;
+    margin-top: 10px;
+    margin-left: 50%;
     text-align: center;
-    text-decoration: none;
-    outline: none;
-    color: #fff;
-    background-color:  #4c5daf;;
-    border: none;
-    border-radius: 15px;
-    box-shadow: 0 9px #999;
-  }
-  
-  .button:hover {background-color: #3e858e}
-  
-  .button:active {
-    background-color: #3e858e;
-    box-shadow: 0 5px #666;
-    transform: translateY(4px);
   }
   
