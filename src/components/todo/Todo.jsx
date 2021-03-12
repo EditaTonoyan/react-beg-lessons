@@ -1,9 +1,11 @@
 import React, { Component } from 'react';
-import Task from '../Task/Task'
-import Addtask from '../Addnewtask/Addtask'
-import IdGenerator from '../../Helpers/IdGenerator'
-import styles from './Todo.module.css'
+import Task from '../Task/Task';
+// import Addtask from '../Addnewtask/Addtask'
+import IdGenerator from '../../Helpers/IdGenerator';
+import styles from './Todo.module.css';
 import { Col, Container, Row, Button} from 'react-bootstrap';
+import AddTaskModal from '../addTaskModal';
+import ConfirModal from '../deleteTaskModal/ConfirModal'
 
 
 class Todo extends Component {
@@ -29,10 +31,22 @@ class Todo extends Component {
         ],
         inputValue:'',
         checkedTasks:new Set(),
-        onHide:true
+        onHide:true,
+        isOpenAddTaskModel:false,
+        isOpenDeleteTaskModal:false
         
     }
+    toggleOpenAddTaskModel = () => {
+        this.setState({
+            isOpenAddTaskModel:!this.state.isOpenAddTaskModel
+        });
+    }
 
+    toggleOpenDeleteTaskModal = () => {
+        this.setState({
+            isOpenDeleteTaskModal:!this.state.isOpenDeleteTaskModal
+        });
+    }
     handleSubmit = (inputsValues) =>{
         const task = [...this.state.task];
         task.push({
@@ -94,7 +108,7 @@ class Todo extends Component {
     }
 
     render() {
-        const {checkedTasks,task} = this.state;
+        const {checkedTasks,task,isOpenAddTaskModel,isOpenDeleteTaskModal} = this.state;
         const newTask = this.state.task.map(task => {
             return (<Col className = "mt-3"
                          key = {task._id} >
@@ -104,7 +118,7 @@ class Todo extends Component {
                         handleDeletetask = {this.handleDeletetask}
                         handlecheckedTasks = {this.handlecheckedTasks}
                         handleCheckAll = {this.handleCheckAll}
-                         />
+                        />
                          
                     </Col>)
         })
@@ -114,33 +128,38 @@ class Todo extends Component {
 
 
         return (
-            <Container >
+            <>
+            <Container>
                 <Row>
                     <Col>
                         <h1 className={styles.header}>My ToDo List</h1>
                     </Col>
                     
                 </Row>
+
                 <Row>
                     <Col>
-                        <Addtask
-                             isAnyTaskChecked = {!!checkedTasks.size}
-                             handleSubmit = {this.handleSubmit}
-                        />
-                     </Col>
-                    
+                        <Button
+                            style={{marginLeft:'50%'}}
+                            onClick = {this.toggleOpenAddTaskModel}
+                            disabled = {checkedTasks.size || this.state.title || this.state.description}
+                        >
+                            Click For Add
+                        </Button>
+                     </Col>                    
                 </Row>
                 
-                 <Row xl={4} xs={2} sm={3}> 
+                <Row xl={4} xs={2} sm={3}> 
                     {newTask.length ? newTask : <p style={{color:'black'}}>there are no tasks</p>}
-                 </Row>
+                </Row>
+
                 <Row  className="justify-content-center mt-5">
                     <Button 
-                     style = {{display:!!task.length ? 'block' : 'none' }}
+                      style = {{display:!!task.length ? 'block' : 'none' }}
                       variant = "danger"
                       onClick = {this.handleDeleteCheckedTask}
                       disabled = {!!!checkedTasks.size}
-                     
+                      onClick = {this.toggleOpenDeleteTaskModal}
                       
                     >
                         Delete All checked
@@ -160,10 +179,20 @@ class Todo extends Component {
                         }
                     </Button>
 
-                </Row>
-
-                
+                </Row>                
             </Container>
+            {isOpenAddTaskModel && <AddTaskModal
+                                    onHide = {this.toggleOpenAddTaskModel}
+                                    isAnyTaskChecked = {!!checkedTasks.size}
+                                    handleSubmit = {this.handleSubmit}
+            />}
+
+            {isOpenDeleteTaskModal && <ConfirModal
+                                          onHide = {this.toggleOpenDeleteTaskModal}
+                                          handleDeleteCheckedTask = {this.handleDeleteCheckedTask}
+                                          count = {checkedTasks.size}
+            />}
+            </>
         )
     }
 }
