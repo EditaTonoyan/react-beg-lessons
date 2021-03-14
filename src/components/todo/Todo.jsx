@@ -4,7 +4,8 @@ import Task from '../Task/Task';
 import IdGenerator from '../../Helpers/IdGenerator';
 import styles from './Todo.module.css';
 import { Col, Container, Row, Button} from 'react-bootstrap';
-import AddTaskModal from '../addTaskModal';
+import AddTaskModal from '../addTaskModal/AddTaskModal';
+import EditTaskModal from '../editTaskModal/EditTaskModal';
 import ConfirModal from '../deleteTaskModal/ConfirModal'
 
 
@@ -33,9 +34,33 @@ class Todo extends Component {
         checkedTasks:new Set(),
         onHide:true,
         isOpenAddTaskModel:false,
-        isOpenDeleteTaskModal:false
+        isOpenEditTaskModel:false,
+        isOpenDeleteTaskModal:false,
+        editableTask:null
         
     }
+
+    setEditableTask = (editableTask) => {
+        this.setState({
+            editableTask
+        });
+    }
+    removeEditableTask = () => {
+        this.setState({
+            editableTask: null
+        });
+    }
+    handleEditTask = (editableTask) => {
+        const task = [...this.state.task];
+        const idx = task.findIndex(task => task._id === editableTask._id);
+        task[idx] = editableTask;
+        this.setState({
+            task
+        });
+
+    }
+
+
     toggleOpenAddTaskModel = () => {
         this.setState({
             isOpenAddTaskModel:!this.state.isOpenAddTaskModel
@@ -107,8 +132,25 @@ class Todo extends Component {
         })
     }
 
+    getTaskById = (checkedTasks) =>{
+        let title = null;
+        if(checkedTasks.size == 1){
+            const iterator = checkedTasks.values();
+            const id = iterator.next().value;
+            const chachetask = this.state.task.find(task => task._id == id);
+            title = chachetask.title;
+        }else{
+          title = checkedTasks.size;
+        }
+    
+        return title;
+        
+       
+    
+    }
+
     render() {
-        const {checkedTasks,task,isOpenAddTaskModel,isOpenDeleteTaskModal} = this.state;
+        const {checkedTasks,task,isOpenAddTaskModel,isOpenDeleteTaskModal,editableTask} = this.state;
         const newTask = this.state.task.map(task => {
             return (<Col className = "mt-3"
                          key = {task._id} >
@@ -118,6 +160,7 @@ class Todo extends Component {
                         handleDeletetask = {this.handleDeletetask}
                         handlecheckedTasks = {this.handlecheckedTasks}
                         handleCheckAll = {this.handleCheckAll}
+                        setEditableTask = {this.setEditableTask}
                         />
                          
                     </Col>)
@@ -190,8 +233,16 @@ class Todo extends Component {
             {isOpenDeleteTaskModal && <ConfirModal
                                           onHide = {this.toggleOpenDeleteTaskModal}
                                           handleDeleteCheckedTask = {this.handleDeleteCheckedTask}
-                                          count = {checkedTasks.size}
+                                          countOrTaskName = {this.getTaskById(checkedTasks)}
             />}
+
+            {editableTask  && <EditTaskModal
+                                    onHide = {this.removeEditableTask}
+                                    editableTask={editableTask}
+                                    onSubmit={this.handleEditTask}
+                                    
+                                  />
+            }
             </>
         )
     }

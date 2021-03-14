@@ -1,17 +1,18 @@
-import React from 'react';
+import React,  { createRef } from 'react';
 import{Button, Modal,FormControl,Form} from 'react-bootstrap';
-import styles from './AddTaskModal.module.css'
+import styles from './AddTaskModal.module.css';
+import PropTypes from 'prop-types';
 
 
 class AddTaskModal extends React.Component{
-
- 
-            state = {
-              title:'',
-              description:''
-          } 
-         
-
+  constructor(props) {
+    super(props);
+    this.inputRef = createRef();
+    this.state = {
+        title: "",
+        description: ""
+    }
+}
           handlechange = (event) => {
               const {value, name} = event.target;
               this.setState({
@@ -36,6 +37,9 @@ class AddTaskModal extends React.Component{
             this.props.onHide();
         }
           
+        componentDidMount() {
+          this.inputRef.current.focus();
+      }
 
     render(){
        const {isAnyTaskChecked, onHide}  = this.props
@@ -55,6 +59,7 @@ class AddTaskModal extends React.Component{
       </Modal.Header>
       <Modal.Body>
             <FormControl 
+                ref={this.inputRef}
                 name='title'
                 type='text'
                 onChange={this.handlechange} 
@@ -86,7 +91,6 @@ class AddTaskModal extends React.Component{
             Close
         </Button>
         <Button
-        onClick = {onHide}
         onClick={this.handleSub} 
         disabled = {isAnyTaskChecked || !title || !description}
         >
@@ -97,5 +101,11 @@ class AddTaskModal extends React.Component{
       )
     }
     
+}
+
+AddTaskModal.propTypes = {
+  onHide:PropTypes.func,
+  isAnyTaskChecked:PropTypes.bool,
+  handleSubmit:PropTypes.func,
 }
 export default AddTaskModal

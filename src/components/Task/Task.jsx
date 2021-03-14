@@ -12,6 +12,8 @@ const Task = ({
                 handlecheckedTasks, 
                 isAnyTaskChecked, 
                 isChecked, 
+                getEditableTask,
+                setEditableTask,
                 ...props}) => {
 
         const classes = [];
@@ -26,6 +28,7 @@ const Task = ({
                             <InputGroup.Checkbox 
                             onChange={() => handlecheckedTasks(task._id)}
                             checked = {isChecked}
+
                             
                             />
                     </div>
@@ -44,6 +47,7 @@ const Task = ({
                             variant="warning" 
                             className="ml-3"
                             disabled={isAnyTaskChecked}
+                            onClick={() => setEditableTask(task)}
                         >
                             <FontAwesomeIcon icon={faEdit} />
                         </Button>

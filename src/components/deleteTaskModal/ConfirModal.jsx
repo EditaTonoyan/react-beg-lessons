@@ -1,8 +1,8 @@
-import React, { Component } from 'react';
-import {memo} from 'react'
+import PropTypes from 'prop-types';
 import {Modal, Button} from 'react-bootstrap';
 
- const ConfirModal = ( {onHide,handleDeleteCheckedTask,count}) =>  {
+
+ const ConfirModal = ( {onHide,handleDeleteCheckedTask,countOrTaskName}) =>  {
     const  onSubmit = () => {
         onHide();
         handleDeleteCheckedTask();
@@ -16,7 +16,7 @@ import {Modal, Button} from 'react-bootstrap';
                      >
                     <Modal.Header closeButton>
                     <Modal.Title>
-                        Did You want to delete {count} of tasks?</Modal.Title>
+                        Did You want to delete {countOrTaskName} of tasks?</Modal.Title>
                     </Modal.Header>
 
                     <Modal.Footer>
@@ -38,4 +38,12 @@ import {Modal, Button} from 'react-bootstrap';
         )
     }
 
-export default memo(ConfirModal)
+    ConfirModal.propTypes = {
+        onHide: PropTypes.func.isRequired,
+        handleDeleteCheckedTask: PropTypes.func.isRequired,
+        countOrTaskName: PropTypes.oneOfType([
+            PropTypes.number,
+            PropTypes.string
+        ])
+    }
+export default ConfirModal
