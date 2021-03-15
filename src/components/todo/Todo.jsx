@@ -4,8 +4,9 @@ import Task from '../Task/Task';
 import IdGenerator from '../../Helpers/IdGenerator';
 import styles from './Todo.module.css';
 import { Col, Container, Row, Button} from 'react-bootstrap';
-import AddTaskModal from '../addTaskModal/AddTaskModal';
-import EditTaskModal from '../editTaskModal/EditTaskModal';
+// import AddTaskModal from '../addTaskModal/AddTaskModal';
+// import EditTaskModal from '../editTaskModal/EditTaskModal';
+import AddEditTaskModal from '../AddEditTaskModal/AddEditTaskModal'
 import ConfirModal from '../deleteTaskModal/ConfirModal'
 
 
@@ -33,38 +34,55 @@ class Todo extends Component {
         inputValue:'',
         checkedTasks:new Set(),
         onHide:true,
-        isOpenAddTaskModel:false,
-        isOpenEditTaskModel:false,
+        isOpenAddEditTaskModal:false,
         isOpenDeleteTaskModal:false,
-        editableTask:null
+        editableTask:{
+            _id:'',
+            title:'',
+            description:''
+        }
         
     }
 
-    setEditableTask = (editableTask) => {
-        this.setState({
-            editableTask
-        });
+
+    toggleOpenTaskModel = (editableTask = null) => {       
+        if(editableTask === null){
+            this.setState({
+                isOpenAddEditTaskModal:!this.state.isOpenAddEditTaskModal
+            });
+        }else{
+            this.setState({
+                isOpenAddEditTaskModal:!this.state.isOpenAddEditTaskModal,
+                editableTask
+            });
+        }
+        
     }
-    removeEditableTask = () => {
-        this.setState({
-            editableTask: null
-        });
-    }
-    handleEditTask = (editableTask) => {
+
+    handleSubmit = (inputsValues) =>{
         const task = [...this.state.task];
-        const idx = task.findIndex(task => task._id === editableTask._id);
-        task[idx] = editableTask;
-        this.setState({
-            task
-        });
+        if(inputsValues._id === ''){
+            inputsValues._id = IdGenerator();
+            task.push(inputsValues);
+            this.setState({
+                task
+            });
+        }else{
+            const idx = task.findIndex(task => task._id === inputsValues._id);
+            task[idx] = inputsValues;
+            const editableTask = {
+                _id:'',
+                title:'',
+                description:''
+            }
+            this.setState({
+                task,
+                editableTask
+            });
+        }
 
-    }
-
-
-    toggleOpenAddTaskModel = () => {
-        this.setState({
-            isOpenAddTaskModel:!this.state.isOpenAddTaskModel
-        });
+        
+        
     }
 
     toggleOpenDeleteTaskModal = () => {
@@ -72,16 +90,7 @@ class Todo extends Component {
             isOpenDeleteTaskModal:!this.state.isOpenDeleteTaskModal
         });
     }
-    handleSubmit = (inputsValues) =>{
-        const task = [...this.state.task];
-        task.push({
-                 ...inputsValues,
-                _id:IdGenerator()});
-        this.setState({
-            task
-
-        });
-    }
+ 
     handleDeletetask = (_id) => {
         let task = [...this.state.task];
         task = task.filter(task => task._id !== _id)
@@ -150,7 +159,7 @@ class Todo extends Component {
     }
 
     render() {
-        const {checkedTasks,task,isOpenAddTaskModel,isOpenDeleteTaskModal,editableTask} = this.state;
+        const {checkedTasks,task,isOpenAddEditTaskModal,isOpenDeleteTaskModal} = this.state;
         const newTask = this.state.task.map(task => {
             return (<Col className = "mt-3"
                          key = {task._id} >
@@ -160,7 +169,7 @@ class Todo extends Component {
                         handleDeletetask = {this.handleDeletetask}
                         handlecheckedTasks = {this.handlecheckedTasks}
                         handleCheckAll = {this.handleCheckAll}
-                        setEditableTask = {this.setEditableTask}
+                        toggleOpenTaskModel = {this.toggleOpenTaskModel}
                         />
                          
                     </Col>)
@@ -184,7 +193,7 @@ class Todo extends Component {
                     <Col>
                         <Button
                             style={{marginLeft:'50%'}}
-                            onClick = {this.toggleOpenAddTaskModel}
+                            onClick = {() => this.toggleOpenTaskModel(this.state.editableTask)}
                             disabled = {checkedTasks.size || this.state.title || this.state.description}
                         >
                             Click For Add
@@ -224,25 +233,31 @@ class Todo extends Component {
 
                 </Row>                
             </Container>
-            {isOpenAddTaskModel && <AddTaskModal
+            {/* {isOpenAddTaskModel && <AddTaskModal
                                     onHide = {this.toggleOpenAddTaskModel}
                                     isAnyTaskChecked = {!!checkedTasks.size}
                                     handleSubmit = {this.handleSubmit}
-            />}
+            />} */}
 
             {isOpenDeleteTaskModal && <ConfirModal
                                           onHide = {this.toggleOpenDeleteTaskModal}
                                           handleDeleteCheckedTask = {this.handleDeleteCheckedTask}
                                           countOrTaskName = {this.getTaskById(checkedTasks)}
             />}
-
+{/* 
             {editableTask  && <EditTaskModal
                                     onHide = {this.removeEditableTask}
                                     editableTask={editableTask}
                                     onSubmit={this.handleEditTask}
                                     
                                   />
-            }
+            } */}
+
+            { isOpenAddEditTaskModal && <AddEditTaskModal
+                                            onHide = {this.toggleOpenTaskModel} 
+                                            editableTask = {this.state.editableTask}
+                                            handleSubmit = {this.handleSubmit}
+                                        />}
             </>
         )
     }

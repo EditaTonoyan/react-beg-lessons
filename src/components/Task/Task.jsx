@@ -12,8 +12,7 @@ const Task = ({
                 handlecheckedTasks, 
                 isAnyTaskChecked, 
                 isChecked, 
-                getEditableTask,
-                setEditableTask,
+                toggleOpenTaskModel,
                 ...props}) => {
 
         const classes = [];
@@ -47,7 +46,7 @@ const Task = ({
                             variant="warning" 
                             className="ml-3"
                             disabled={isAnyTaskChecked}
-                            onClick={() => setEditableTask(task)}
+                            onClick={() => toggleOpenTaskModel(task)}
                         >
                             <FontAwesomeIcon icon={faEdit} />
                         </Button>

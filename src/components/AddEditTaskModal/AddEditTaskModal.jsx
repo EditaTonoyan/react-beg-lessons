@@ -1,19 +1,21 @@
 import React,  { createRef } from 'react';
 import{Button, Modal,FormControl,Form} from 'react-bootstrap';
-import styles from './AddTaskModal.module.css';
+import styles from './AddEditTaskModal.module.css';
 import PropTypes from 'prop-types';
 
 
-class AddTaskModal extends React.Component{
+class AddEditTaskModal extends React.Component{
   constructor(props) {
     super(props);
     this.inputRef = createRef();
     this.state = {
-        title: "",
-        description: ""
+        ...this.props.editableTask
     }
 }
-          handlechange = (event) => {
+          
+
+
+        handlechange = (event) => {
               const {value, name} = event.target;
               this.setState({
                   [name]:value
@@ -21,7 +23,7 @@ class AddTaskModal extends React.Component{
           }
 
           handleSub = ({key, type}) =>{  
-            const {title,description} = this.state     
+            const {_id,title,description} = this.state     
             if(!title || !description ||
                 (type === 'keypress' && key !== 'Enter')
                 )
@@ -29,6 +31,7 @@ class AddTaskModal extends React.Component{
     
     
                 const inputsValues = {
+                    _id:_id,
                     title:title,
                     description:description
                 }
@@ -43,7 +46,7 @@ class AddTaskModal extends React.Component{
 
     render(){
        const {isAnyTaskChecked, onHide}  = this.props
-       const{title, description} = this.state
+       const{_id, title, description} = this.state
       return(
       <Modal
       onHide = {onHide}
@@ -94,7 +97,8 @@ class AddTaskModal extends React.Component{
         onClick={this.handleSub} 
         disabled = {isAnyTaskChecked || !title || !description}
         >
-            Add
+            {_id === '' ? 'Add' : 'Save'}
+            
         </Button>
       </Modal.Footer>
     </Modal>
@@ -103,9 +107,9 @@ class AddTaskModal extends React.Component{
     
 }
 
-AddTaskModal.propTypes = {
-  onHide:PropTypes.func,
-  isAnyTaskChecked:PropTypes.bool,
+ AddEditTaskModal.propTypes = {
+   onHide:PropTypes.func,
+   isAnyTaskChecked:PropTypes.bool,
   handleSubmit:PropTypes.func,
 }
-export default AddTaskModal
+export default AddEditTaskModal
