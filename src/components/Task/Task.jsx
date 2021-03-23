@@ -5,6 +5,7 @@ import {Card, Button, InputGroup} from 'react-bootstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faTrash, faEdit } from '@fortawesome/free-solid-svg-icons';
 import PropTypes from 'prop-types';
+import GetDate from '../../Helpers/GetDate'
 
 const Task = ({ 
                 task, 
@@ -12,16 +13,18 @@ const Task = ({
                 handlecheckedTasks, 
                 isAnyTaskChecked, 
                 isChecked, 
-                toggleOpenTaskModel,
+                getEditableTask,
+                editableTask,
                 ...props}) => {
 
         const classes = [];
         if(isChecked){
             classes.push(styles.disabled)
         }
-  
-    
+      
         return (
+           
+       
                 <Card className={classes.join(' ')}>
                     <div className={styles.chbox}>
                             <InputGroup.Checkbox 
@@ -34,6 +37,8 @@ const Task = ({
                     <Card.Body>
                         <Card.Title  style={{color:"#495057"}}>{task.title} </Card.Title>
                         <Card.Text  style={{color:"#495057"}} className="mb-3">{task.description}</Card.Text>
+                        <Card.Text  style={{color:"#495057"}} className="mb-3">{task.date.slice(0,10)}</Card.Text>
+                        
                         <Button
                             variant="danger"
                             onClick={(e) => handleDeletetask(task._id)}
@@ -46,7 +51,7 @@ const Task = ({
                             variant="warning" 
                             className="ml-3"
                             disabled={isAnyTaskChecked}
-                            onClick={() => toggleOpenTaskModel(task)}
+                            onClick={() => getEditableTask(task)}
                         >
                             <FontAwesomeIcon icon={faEdit} />
                         </Button>
