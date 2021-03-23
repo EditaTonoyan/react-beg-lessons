@@ -1,6 +1,6 @@
 import './App.css';
 import React from 'react'
-import Todo from  './components/Pages/todo/Todo';
+import Todo from  './components/todo/Todo';
 
 
 

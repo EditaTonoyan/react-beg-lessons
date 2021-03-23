@@ -1,9 +1,9 @@
 import React, { Component } from 'react';
-import Task from '../../Task/Task';
+import Task from '../Task/Task';
 import styles from './Todo.module.css';
 import { Col, Container, Row, Button} from 'react-bootstrap';
-import AddEditTaskModal from '../../AddEditTaskModal/AddEditTaskModal'
-import ConfirModal from '../../deleteTaskModal/ConfirModal'
+import AddEditTaskModal from '../AddEditTaskModal/AddEditTaskModal'
+import ConfirModal from '../deleteTaskModal/ConfirModal'
 
 const API_HOST = "http://localhost:3001";
 class Todo extends Component {
