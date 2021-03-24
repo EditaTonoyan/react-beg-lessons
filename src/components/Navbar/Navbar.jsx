@@ -24,7 +24,7 @@ const navlinks = [
 export default function Navbar() {
     const getnavLink = navlinks.map((navlink,index) => {
         return (
-            <Nav.Item key = {index} activeClassName = {styles.navItemStyle}>
+            <Nav.Item key = {index}>
             <NavLink 
                 to={navlink.to}
                 className="nav-link"
