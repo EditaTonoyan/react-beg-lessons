@@ -1,10 +1,14 @@
 import './App.css';
 import{Route,Redirect,Switch} from 'react-router-dom';
 import React from 'react'
-import Todo from  './components/Pages/todo/Todo';
-import Contact from './components/Pages/Contact';
-import AboutUs from './components/Pages/AboutUs';
 import Navbar from './components/Navbar/Navbar';
+// PAGES
+import Todo from  './components/Pages/todo/Todo';
+import Contact from './components/Pages/Contact/Contact';
+import AboutUs from './components/Pages/AboutUs/AboutUs';
+import NotFound from './components/Pages/NotFoundPage/NotFound';
+import SingleTask from './components/Pages/SingleTaskPage/SingleTask';
+
 const router = [
   { 
     path: "/",
@@ -19,6 +23,16 @@ const router = [
   {
     path: "/about_us",
     component:AboutUs,
+    exact: true
+  },
+  {
+    path: "/task/:id",
+    component:SingleTask,
+    exact: true
+  },
+  {
+    path: "/404",
+    component:NotFound,
     exact: true
   }
 ]
@@ -42,7 +56,7 @@ export default function App() {
             <Navbar/>
             <Switch>
                {pages}
-               <Redirect to="/"/>
+               <Redirect to="/404"/>
             </Switch>
 
     </div>

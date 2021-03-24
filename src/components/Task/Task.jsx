@@ -5,7 +5,9 @@ import {Card, Button, InputGroup} from 'react-bootstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faTrash, faEdit } from '@fortawesome/free-solid-svg-icons';
 import PropTypes from 'prop-types';
-import GetDate from '../../Helpers/GetDate'
+// import GetDate from '../../Helpers/GetDate'
+import { withRouter,Link } from 'react-router-dom';
+
 
 const Task = ({ 
                 task, 
@@ -22,9 +24,7 @@ const Task = ({
             classes.push(styles.disabled)
         }
       
-        return (
-           
-       
+        return (     
                 <Card className={classes.join(' ')}>
                     <div className={styles.chbox}>
                             <InputGroup.Checkbox 
@@ -35,7 +35,11 @@ const Task = ({
                             />
                     </div>
                     <Card.Body>
-                        <Card.Title  style={{color:"#495057"}}>{task.title} </Card.Title>
+                        <Card.Title  style={{color:"#495057"}}>
+                            <Link to={`/task/${task._id}`}>
+                                 {task.title} 
+                            </Link>
+                        </Card.Title>
                         <Card.Text  style={{color:"#495057"}} className="mb-3">{task.description}</Card.Text>
                         <Card.Text  style={{color:"#495057"}} className="mb-3">{task.date.slice(0,10)}</Card.Text>
                         
@@ -74,4 +78,4 @@ Task.propTypes = {
 
 
 }
-export default memo (Task)
+export default withRouter(memo (Task))

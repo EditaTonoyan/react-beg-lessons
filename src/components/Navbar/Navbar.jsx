@@ -1,6 +1,7 @@
 import React from 'react'
 import {Nav} from 'react-bootstrap';
 import {NavLink} from 'react-router-dom';
+import styles from './navbar.module.css';
 
 const navlinks = [
     {
@@ -23,7 +24,7 @@ const navlinks = [
 export default function Navbar() {
     const getnavLink = navlinks.map((navlink,index) => {
         return (
-            <Nav.Item key = {index}>
+            <Nav.Item key = {index} activeClassName = {styles.navItemStyle}>
             <NavLink 
                 to={navlink.to}
                 className="nav-link"
@@ -36,9 +37,9 @@ export default function Navbar() {
         )
     })
     return (
-        <div>
+        <div className={styles.body}>
            
-            <Nav>
+            <Nav variant="tabs">
                 {getnavLink}
             </Nav>
         </div>

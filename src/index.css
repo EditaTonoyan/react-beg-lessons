@@ -389,15 +389,19 @@ textarea {
     padding: 0.2em 0;
 }
 
-html, body {
+/* html, body {
   height: 100%;
   color: #61DAFB;
   background: #d5eceb;
-}
+} */
 
 h1 {
   margin: 20px 0 15px 0;  
-}
+  background-color :rgba(60, 139, 120, .3);
+  padding:30px 40px;
+  color:white;
+  text-align: center;
+} 
 
 #main {
   width: 600px;
@@ -424,7 +428,7 @@ ul>li:hover {
 }
 
 .undone {
-  color: #61DAFB;
+  color: #ffffff;
 }
 
 .icon {

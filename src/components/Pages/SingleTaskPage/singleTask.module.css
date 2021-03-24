@@ -1,0 +1,8 @@
+.singleTaskStyle {
+    width: 70%;
+    margin:70px auto 0px;
+    background-color: rgba(60, 139, 120, .3);
+    border-radius: 15px;
+    padding:50px;
+    color:rgb(22, 20, 20);
+}

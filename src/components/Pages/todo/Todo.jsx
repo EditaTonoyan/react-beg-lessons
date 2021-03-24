@@ -3,7 +3,8 @@ import Task from '../../Task/Task';
 import styles from './Todo.module.css';
 import { Col, Container, Row, Button} from 'react-bootstrap';
 import AddEditTaskModal from '../../AddEditTaskModal/AddEditTaskModal'
-import ConfirModal from '../../deleteTaskModal/ConfirModal'
+import ConfirModal from '../../deleteTaskModal/ConfirModal';
+
 
 const API_HOST = "http://localhost:3001";
 class Todo extends Component {
@@ -239,8 +240,8 @@ class Todo extends Component {
 
 
         return (
-            <>
-            <Container>
+            <div className = {styles.body}>
+            <Container >
                 <Row>
                     <Col>
                         <h1 className={styles.header}>My ToDo List</h1>
@@ -314,7 +315,7 @@ class Todo extends Component {
                         editableTask={editableTask}
                     />
                 }
-            </>
+            </div>
         )
     }
 }

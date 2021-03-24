@@ -31,7 +31,11 @@
     -ms-user-select: none;
     user-select: none;
   }
-  
+  .body {
+    height: 100%;
+    color: #61DAFB;
+    background: #d5eceb;
+  }
   /* Set all odd list items to a different color (zebra-stripes) */
 
 
