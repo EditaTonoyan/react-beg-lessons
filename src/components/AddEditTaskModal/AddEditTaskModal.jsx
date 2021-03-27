@@ -17,8 +17,6 @@ class AddEditTaskModal extends React.Component{
   }
 }
 
-// props.editableTask ? new Date(props.editableTask.date) :
-
 setDate = (date) => {
   this.setState({
       date
@@ -44,7 +42,7 @@ handleSub = ({ key, type }) => {
         date:GetDate(this.state.date)
       }
   this.props.onSubmit(formData);
-  this.props.onHide();
+  // this.props.onHide();
 }
 
         
@@ -125,6 +123,6 @@ handleSub = ({ key, type }) => {
  AddEditTaskModal.propTypes = {
    onHide:PropTypes.func,
    isAnyTaskChecked:PropTypes.bool,
-  handleSubmit:PropTypes.func,
+   handleSubmit:PropTypes.func,
 }
 export default AddEditTaskModal

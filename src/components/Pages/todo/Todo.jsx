@@ -4,6 +4,7 @@ import styles from './Todo.module.css';
 import { Col, Container, Row, Button} from 'react-bootstrap';
 import AddEditTaskModal from '../../AddEditTaskModal/AddEditTaskModal'
 import ConfirModal from '../../deleteTaskModal/ConfirModal';
+import Spinner from '../../Spinner/Spinner';
 
 
 const API_HOST = "http://localhost:3001";
@@ -15,9 +16,13 @@ class Todo extends Component {
         onHide:true,
         isOpenAddTaskModal:false,
         isOpenDeleteTaskModal:false,
-        editableTask:''
+        editableTask:'',
+        isOpenSpinner:false,
+        // isOpenDeleteSpinner:false
         
     }
+
+   
     //EDIT
 
     toggleSetEditableTask = (editableTask = null) => {
@@ -32,6 +37,9 @@ class Todo extends Component {
            
             try{
                 const _id = editableTask._id
+                this.setState({
+                    isOpenSpinner:true,
+                })
                 const res = await fetch (`${API_HOST}/task/${_id}`,{
                     method:"PUT",
                     body:JSON.stringify(editableTask),
@@ -42,17 +50,24 @@ class Todo extends Component {
                 const data = await res.json();
                 if(data.error){
                     throw data.error
-                }else{
+                }else{ 
                     const task = [...this.state.task];
                     const idx = task.findIndex(task => task._id === data._id);
                     task[idx] = data;
                     this.setState({
-                        task
+                        task,
+                        editableTask:''
+                        
                    });
                 }
             
                 }catch( error)  {
                     console.log("edit task error", error)
+                }finally{
+                    this.setState({
+                        isOpenSpinner:false,
+                       
+                    })
                 }
         })()
     }
@@ -65,6 +80,9 @@ class Todo extends Component {
         });
     }
     handleAddTask = (formData) => {
+        this.setState({
+            isOpenSpinner:true
+        })
         fetch(`${API_HOST}/task`,{
             method:"POST",
             body:JSON.stringify(formData),
@@ -81,7 +99,8 @@ class Todo extends Component {
                 const task = [...this.state.task];
                 task.push(data);
                 this.setState({
-                    task
+                    task,
+                    isOpenAddTaskModal:false
                 });
             }
           
@@ -90,11 +109,19 @@ class Todo extends Component {
         .catch(error=> {
             console.log("error", error)
         })
+        .finally(()=>{
+            this.setState({
+                isOpenSpinner:false
+            });
+        })
      
 
     }
 
     componentDidMount() {
+        this.setState({
+            isOpenSpinner:true,
+        })
         fetch(`${API_HOST}/task`)
             .then(res => res.json())
             .then(data => {
@@ -106,7 +133,12 @@ class Todo extends Component {
             })
             .catch(error => {
                 console.log("Get All Tasks ", error);
-            });
+            })
+            .finally(()=>{
+                this.setState({
+                    isOpenSpinner:false,
+                })
+            })
     }
   
     toggleOpenDeleteTaskModal = () => {
@@ -118,6 +150,10 @@ class Todo extends Component {
     handleDeletetask = (_id) => {
        (async () => {
            try{
+              
+                this.setState({
+                    isOpenSpinner:true
+                })
                 let response = await fetch(`${API_HOST}/task/${_id}`,{
                 method:"DELETE"
                 });
@@ -133,6 +169,11 @@ class Todo extends Component {
                 }
            }catch(error){
             console.log("error delete task", error)
+           }finally{
+            this.setState({
+                isOpenSpinner:false
+                
+            })
            }
        
 
@@ -155,6 +196,9 @@ class Todo extends Component {
     
     handleDeleteCheckedTask = () => {
         const {checkedTasks} = this.state;
+        this.setState({
+            isOpenSpinner:true
+        })
         fetch(`${API_HOST}/task`,{
             method:"PATCH",
             body: JSON.stringify({ tasks: Array.from(checkedTasks) }),
@@ -183,6 +227,11 @@ class Todo extends Component {
         })
         .catch(error => {
             console.log("delete All Task Error", error)
+        })
+        .finally(() => {
+            this.setState({
+                isOpenSpinner:false
+            })
         })
        
         
@@ -218,7 +267,14 @@ class Todo extends Component {
     }
 
     render() {
-        const {checkedTasks,task,isOpenAddTaskModal,isOpenDeleteTaskModal,editableTask} = this.state;
+        const {
+                checkedTasks,
+                task,
+                isOpenAddTaskModal,
+                isOpenDeleteTaskModal,
+                editableTask,
+                isOpenSpinner
+            } = this.state;
         const newTask = this.state.task.map(task => {
             return (<Col className = "mt-3"
                          key = {task._id} >
@@ -315,6 +371,8 @@ class Todo extends Component {
                         editableTask={editableTask}
                     />
                 }
+
+                {isOpenSpinner &&  <Spinner/>}
             </div>
         )
     }
