@@ -82,15 +82,14 @@ export default class SingleTask extends Component {
         .then(res => res.json())
         .then(data => {
             if(data.erros) throw data.error
-            this.props.history.push("/");
-        })
-        .catch(error => {
-            console.log("Delete task reques error", error)
-        })
-        .finally(()=> {
             this.setState({
                 isOpenSpinner:false
             })
+            this.props.history.push("/");
+            
+        })
+        .catch(error => {
+            console.log("Delete task reques error", error)
         })
     }
   
