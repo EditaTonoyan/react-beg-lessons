@@ -76,7 +76,7 @@ export default class SingleTask extends Component {
             isOpenSpinner:true,
         })
         const {id} = this.props.match.params;
-        fetch(`${API_HOST}/tassask/${id}`, {
+        fetch(`${API_HOST}/tassk/${id}`, {
             method:"DELETE"
         })
         .then(res => res.json())
