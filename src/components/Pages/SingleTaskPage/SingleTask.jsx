@@ -72,24 +72,25 @@ export default class SingleTask extends Component {
     }
 
     deleteTask = () => {
-        const {id} = this.props.match.params;
         this.setState({
             isOpenSpinner:true,
         })
-        fetch(`${API_HOST}/task/${id}`, {
+        const {id} = this.props.match.params;
+        fetch(`${API_HOST}/tassask/${id}`, {
             method:"DELETE"
         })
         .then(res => res.json())
         .then(data => {
-            if(data.erros) throw data.error
+            if(data.error) throw data.error
             this.props.history.push("/");
             
         })
         .catch(error => {
             console.log("Delete task reques error", error)
             this.setState({
-                isOpenSpinner:false
+                isOpenSpinner:false,
             })
+           
         })
     }
   
