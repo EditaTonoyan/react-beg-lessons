@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import {Form, Button} from 'react-bootstrap';
-import ContactInfo from '../ContactInfo/ContactInfo';
+import { withRouter } from 'react-router-dom';
 const inputs = [
     {
         name:'name',
@@ -22,14 +22,17 @@ const inputs = [
     },
 ]
 const API_HOST = "http://localhost:3001";
-export default class ContactForm extends Component {
-    state ={
-        form:[],
-        name:"",
-        email:"",
-        message:"",
+ class ContactForm extends Component {
+    constructor(props) {
+        super(props)
+    
+        this.state = {
+            name:"",
+            email:"",
+            message:"",
+        }
     }
-
+   
     handleChange = (e) => {
     const {name, value} = e.target
         this.setState({
@@ -37,9 +40,9 @@ export default class ContactForm extends Component {
         })
 
     }
+
     handleSubmit = () => {
         const formData = {...this.state}
-        delete formData.form
         fetch(`${API_HOST}/form`,{
             method:"POST",
             body:JSON.stringify(formData),
@@ -47,25 +50,20 @@ export default class ContactForm extends Component {
                 "Content-Type": "application/json"
             }
         })
+
         .then(res => res.json())
-        .then(data => {
+        .then(data=> {
             if(data.error) throw data.error
-            console.log(data)
+            this.props.history.push("/");
+
         })
-        .catch(error=>{
-            console.log("add conctact reques error", error)
+        .catch(error=> {
+            console.log("error", error)
         })
 
     }
 
-  
-    render() {
-        const forms  = this.state.form.map((formdata, index) =>{
-            return(
-                <ContactInfo key = {index} formdata ={formdata}/>
-            )
-        } )
-        
+    render() { 
         const inputForms = inputs.map((input, index)=>{
             
             return (
@@ -104,8 +102,8 @@ export default class ContactForm extends Component {
 
                 </Form>
 
-                {forms}
             </div>
         )
     }
 }
+export default withRouter(ContactForm)

@@ -18,7 +18,6 @@ class Todo extends Component {
         isOpenDeleteTaskModal:false,
         editableTask:'',
         isOpenSpinner:false,
-        // isOpenDeleteSpinner:false
         
     }
 
@@ -96,13 +95,12 @@ class Todo extends Component {
             if(data.error){
                 throw data.error  
             }else{
-                // const task = [...this.state.task];
-                // task.push(data);
-                // this.setState({
-                //     task,
-                //     isOpenAddTaskModal:false
-                // });
-                console.log(data)
+                const task = [...this.state.task];
+                task.push(data);
+                this.setState({
+                    task,
+                    isOpenAddTaskModal:false
+                });
             }
           
 
