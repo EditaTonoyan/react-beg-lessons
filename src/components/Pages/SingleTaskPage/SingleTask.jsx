@@ -10,11 +10,13 @@ import PropTypes from 'prop-types';
 
 const API_HOST = "http://localhost:3001";
 export default class SingleTask extends Component {
+   
     state = {
         singleTask:null,
         isOpenTaskModal:false,
         isOpenSpinner:false
     }
+    
 
     toggleOpenTaskModal = () => {
         this.setState({
@@ -66,8 +68,8 @@ export default class SingleTask extends Component {
                 });
             })
             .catch(error => {
-                this.props.history.push('/404')
-                console.log("Single task reques error ", error);
+                this.props.history.push(`/error/${error.status}`, error.message)
+                console.log("Single task reques erstror ", error);
             })
     }
 

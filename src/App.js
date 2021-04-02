@@ -31,7 +31,7 @@ const router = [
     exact: true
   },
   {
-    path: "/404",
+    path: "/error/:status",
     component:NotFound,
     exact: true
   }
@@ -56,7 +56,7 @@ export default function App() {
             <Navbar/>
             <Switch>
                {pages}
-               <Redirect to="/404"/>
+               <Redirect to="/error/404"/>
             </Switch>
 
     </div>
