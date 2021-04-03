@@ -26,7 +26,7 @@ const inputs = [
     },
 ]
 
-let maxLength20 = maxLength(20);
+let maxLength20 = maxLength(30);
 let minLength6 = minLength(1)
 const API_HOST = "http://localhost:3001";
  class ContactForm extends Component {

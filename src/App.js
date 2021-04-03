@@ -2,6 +2,7 @@ import './App.css';
 import{Route,Redirect,Switch} from 'react-router-dom';
 import React from 'react'
 import Navbar from './components/Navbar/Navbar';
+import Example from './components/ContactForm/ContactFormWithHooks';
 // PAGES
 import Todo from  './components/Pages/todo/Todo';
 import Contact from './components/Pages/Contact/Contact';
@@ -58,6 +59,7 @@ export default function App() {
                {pages}
                <Redirect to="/error/404"/>
             </Switch>
+            {/* <Example/> */}
 
     </div>
 
