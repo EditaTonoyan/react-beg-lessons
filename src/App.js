@@ -8,7 +8,10 @@ import Todo from  './components/Pages/todo/Todo';
 import Contact from './components/Pages/Contact/Contact';
 import AboutUs from './components/Pages/AboutUs/AboutUs';
 import NotFound from './components/Pages/NotFoundPage/NotFound';
-import SingleTask from './components/Pages/SingleTaskPage/SingleTask';
+//HOOKS
+// import SingleTask from './components/Pages/SingleTaskPage/SingleTask'
+import SingleTaskContextProvider from './components/context/Providers/SingleTaskContextProvider';
+import SingleTaskForContext from './components/Pages/SingleTaskPage/SingleTaskForContext';
 
 const router = [
   { 
@@ -26,9 +29,14 @@ const router = [
     component:AboutUs,
     exact: true
   },
+  // {
+  //   path: "/task/:id",
+  //   component:SingleTaskWithReducer,
+  //   exact: true
+  // }, 
   {
     path: "/task/:id",
-    component:SingleTask,
+    component:SingleTaskForContext,
     exact: true
   },
   {
@@ -40,16 +48,39 @@ const router = [
 export default function App() {
 
  const pages = router.map((page,index)=>{
-  return (
-            <Route
+
+   if(index === 3){
+     
+  return(
+     <Route
+        key = {index}
+        path={page.path}
+        render  = { (props) => (
+           <SingleTaskContextProvider  {...props}>
+          < page.component {...props}/>
+        </SingleTaskContextProvider>
+        )
+       
+        
+      }
+      exact={page.exact}
+    />
+  );
+   }
+      
+           return(
+             <Route
+      
               key = {index}
               path={page.path}
               component = {page.component}
               exact={page.exact}
             />
  
-
-  )
+           ) 
+  
+   
+    
 })
   return (
   
@@ -59,7 +90,7 @@ export default function App() {
                {pages}
                <Redirect to="/error/404"/>
             </Switch>
-            {/* <Example/> */}
+           
 
     </div>
 

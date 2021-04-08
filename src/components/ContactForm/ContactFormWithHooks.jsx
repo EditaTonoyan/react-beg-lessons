@@ -1,7 +1,7 @@
 import React, {useState} from 'react';
 import {Form, Button} from 'react-bootstrap';
 import { withRouter } from 'react-router-dom';
-import Spinner from '../Spinner/Spinner';
+import Spinner from '../Pages/SingleTaskPage/Spinner/Spinner';
 import styles from './contactForm.module.css';
 import {isRequired,maxLength,minLength,validateEmail} from '../../Helpers/Validators';
 const inputs = [

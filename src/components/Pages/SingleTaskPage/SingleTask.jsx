@@ -5,12 +5,12 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faTrash, faEdit  } from '@fortawesome/free-solid-svg-icons';
 import AddEditTaskModal from '../../AddEditTaskModal/AddEditTaskModal';
 import {Link} from 'react-router-dom';
-import Spinner from '../../Spinner/Spinner';
+import Spinner from './Spinner/Spinner';
 import PropTypes from 'prop-types';
+import {createSingleTaskContext} from '../../context/context'
 
 const API_HOST = "http://localhost:3001";
 export default class SingleTask extends Component {
-   
     state = {
         singleTask:null,
         isOpenTaskModal:false,
@@ -95,7 +95,6 @@ export default class SingleTask extends Component {
            
         })
     }
-  
 
     render() {
         const {

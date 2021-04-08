@@ -4,7 +4,7 @@ import styles from './Todo.module.css';
 import { Col, Container, Row, Button} from 'react-bootstrap';
 import AddEditTaskModal from '../../AddEditTaskModal/AddEditTaskModal'
 import ConfirModal from '../../deleteTaskModal/ConfirModal';
-import Spinner from '../../Spinner/Spinner';
+import Spinner from '../SingleTaskPage/Spinner/Spinner';
 
 
 const API_HOST = "http://localhost:3001";
