@@ -12,6 +12,8 @@ import NotFound from './components/Pages/NotFoundPage/NotFound';
 // import SingleTask from './components/Pages/SingleTaskPage/SingleTask'
 import SingleTaskContextProvider from './components/context/Providers/SingleTaskContextProvider';
 import SingleTaskForContext from './components/Pages/SingleTaskPage/SingleTaskForContext';
+import SingleTask from './components/Pages/SingleTaskPage/SingleTask';
+import SingleTaskWithReducer from './components/Pages/SingleTaskPage/SingleTaskWithReducer';
 
 const router = [
   { 
@@ -29,16 +31,21 @@ const router = [
     component:AboutUs,
     exact: true
   },
-  // {
-  //   path: "/task/:id",
-  //   component:SingleTaskWithReducer,
-  //   exact: true
-  // }, 
   {
     path: "/task/:id",
-    component:SingleTaskForContext,
+    component:SingleTaskWithReducer,
     exact: true
-  },
+  }, 
+  // {
+  //   path: "/task/:id",
+  //   component:SingleTaskForContext,
+  //   exact: true
+  // },
+  // {
+  //   path: "/task/:id",
+  //   component:SingleTask,
+  //   exact: true
+  // },
   {
     path: "/error/:status",
     component:NotFound,
@@ -49,24 +56,24 @@ export default function App() {
 
  const pages = router.map((page,index)=>{
 
-   if(index === 3){
+  //  if(index === 3){
      
-  return(
-     <Route
-        key = {index}
-        path={page.path}
-        render  = { (props) => (
-           <SingleTaskContextProvider  {...props}>
-          < page.component {...props}/>
-        </SingleTaskContextProvider>
-        )
+  // return(
+  //    <Route
+  //       key = {index}
+  //       path={page.path}
+  //       render  = { (props) => (
+  //          <SingleTaskContextProvider  {...props}>
+  //         < page.component {...props}/>
+  //       </SingleTaskContextProvider>
+  //       )
        
         
-      }
-      exact={page.exact}
-    />
-  );
-   }
+  //     }
+  //     exact={page.exact}
+  //   />
+  // );
+  //  }
       
            return(
              <Route
