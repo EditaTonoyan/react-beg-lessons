@@ -41,7 +41,7 @@ const router = [
   //   component:SingleTaskForContext,
   //   exact: true
   // },
-  // {
+  //  {
   //   path: "/task/:id",
   //   component:SingleTask,
   //   exact: true
