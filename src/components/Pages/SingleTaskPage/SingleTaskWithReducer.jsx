@@ -21,17 +21,10 @@ const reduser = (state = initialState, action) => {
 // console.log(action.type)
     switch (action.type){
        
-        case "MODAL-TRUE": {
+        case "MODAL_TRUE": {
             return {
                 ...state,
                 isOpenTaskModal: true,
-                
-            }
-        }
-        case "MODAL-FALSE": {
-            return {
-                ...state,
-                isOpenTaskModal: false,
                 
             }
         }
@@ -57,9 +50,22 @@ const reduser = (state = initialState, action) => {
                 
             }
         }
-
-
-            
+        case "EDIT_TASK":{
+            return{
+                ...state,
+                singleTask:action.data,
+                isOpenTaskModal:false
+            }
+        }
+        case "TOGGLE_MODAL":{
+            return{
+                ...state,
+                isOpenTaskModal:!state.isOpenTaskModal  
+            }
+         
+        }
+        default: return state
+ 
         }
 
     }
@@ -88,7 +94,7 @@ const SingleTaskWithReducer = (props) => {
     
     },[])
     //DELETE
-   const deleteTask = () => {
+    const deleteTask = () => {
         dispatch({type:"SPINNER_TRUE"})
         const {id} = props.match.params;
         fetch(`${API_HOST}/task/${id}`, {
@@ -121,26 +127,30 @@ const SingleTaskWithReducer = (props) => {
         })
         .then(res => res.json())
         .then(data => {
-            if(data.error) throw data.error
-            dispatch({type:"SET_TASK", data})
+            if(data.error) {
+                throw data.error
+            }else{
+                 
+            dispatch({type:"EDIT_TASK", data})
+
             dispatch({type:"SPINNER_FALSE"})
+            }
+          
           
 
         })
        
         .catch(error=>{
-            dispatch({ type: "MODAL-TRUE" }); 
+            dispatch({ type: "MODAL_TRUE" }); 
             console.log("edit task request error", error)
         })
         .finally(() => {
-            dispatch({ type: "SPINNER-FALSE" }); 
+            dispatch({ type: "SPINNER_FALSE" }); 
     
         })
     }
     
-//    if(!state.singleTask || state.isOpenSpinner) return <Spinner/>
-//    const {singleTask, isOpenTaskModal,isOpenSpinner } = state
- console.log(state.singleTask)
+   if(!state.singleTask) return <Spinner/>
     return (
      
         <div>
@@ -154,8 +164,8 @@ const SingleTaskWithReducer = (props) => {
 
             </div>
             <div className = {styles.singleTaskStyle}>
-            <p style={{textAlign:'center', fontSize:'25px', marginBottom:'20px'}}>Title: {state.singleTask?state.singleTask.title:'return'}</p>
-            <p style={{textAlign:'center', fontSize:'25px'}}>Descriptions: {state.singleTask?state.singleTask.description:'return'}</p>  
+            <p style={{textAlign:'center', fontSize:'25px', marginBottom:'20px'}}>Title: {state.singleTask.title}</p>
+            <p style={{textAlign:'center', fontSize:'25px'}}>Descriptions: {state.singleTask.description}</p>  
             <div  style={{textAlign:'center', marginTop:'25px'}}> 
             <Button
             variant="danger"
@@ -166,7 +176,7 @@ const SingleTaskWithReducer = (props) => {
             <FontAwesomeIcon icon={faTrash} />
             </Button>
             <Button
-            onClick={() =>dispatch({ type: "MODAL-TRUE" })}
+            onClick={() =>dispatch({ type: "TOGGLE_MODAL" })}
             variant="warning"
             className="ml-3"
             >
@@ -177,7 +187,7 @@ const SingleTaskWithReducer = (props) => {
 
             {state.isOpenTaskModal && <AddEditTaskModal
                 onSubmit= {handleEditTask}
-                onHide={() =>dispatch({ type: "MODAL-FALSE" })}
+                onHide={() =>dispatch({ type: "TOGGLE_MODAL" })}
                 editableTask={state.singleTask}
             />} 
             {state.isOpenSpinner && <Spinner/>}
