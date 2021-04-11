@@ -23,8 +23,11 @@ const Task = ({
         if(isChecked){
             classes.push(styles.disabled)
         }
+        
+        
+   
       
-        return (     
+        return(     
                 <Card className={classes.join(' ')}>
                     <div className={styles.chbox}>
                             <InputGroup.Checkbox 

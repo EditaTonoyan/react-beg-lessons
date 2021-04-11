@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import {connect} from 'react-redux';
 import styles from './singleTask.module.css';
 import {Button} from 'react-bootstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -10,24 +11,11 @@ import PropTypes from 'prop-types';
 import {createSingleTaskContext} from '../../context/context'
 
 const API_HOST = "http://localhost:3001";
-export default class SingleTask extends Component {
-    state = {
-        singleTask:null,
-        isOpenTaskModal:false,
-        isOpenSpinner:false
-    }
-    
-
-    toggleOpenTaskModal = () => {
-        this.setState({
-            isOpenTaskModal:!this.state.isOpenTaskModal
-        })
-    }
+class SingleTask extends Component {
 
     handleEditTask = (task) => {
-        this.setState({
-            isOpenSpinner:true,
-        })
+        this.props.setOrRemoveSpinner(true)
+
         fetch(`${API_HOST}/task/${task._id}`, {
             method:"PUT",
             body: JSON.stringify(task),
@@ -38,21 +26,18 @@ export default class SingleTask extends Component {
         .then(res => res.json())
         .then(data => {
             if(data.error) throw data.error
-            this.setState({
-                singleTask: data,
-                isOpenTaskModal:false
-            })
+            this.props.setSingleTask(data);
+            this.props.setOrRemoveModal(false)
+            
+
         })
         .catch(error=>{
-            this.setState({
-                isOpenTaskModal:true
-            })
+            this.props.setOrRemoveModal(true)
             console.log("edit task request error", error)
         })
         .finally(() => {
-            this.setState({
-                isOpenSpinner:false,
-            })
+            this.props.setOrRemoveSpinner(false)
+
         })
     }
 
@@ -63,9 +48,8 @@ export default class SingleTask extends Component {
             .then(data => {
                 if (data.error)
                     throw data.error;
-                this.setState({
-                    singleTask: data
-                });
+                    this.props.setSingleTask(data);
+
             })
             .catch(error => {
                 this.props.history.push(`/error/${error.status}`, error.message)
@@ -74,9 +58,8 @@ export default class SingleTask extends Component {
     }
 
     deleteTask = () => {
-        this.setState({
-            isOpenSpinner:true,
-        })
+        this.props.setOrRemoveSpinner(true)
+        
         const {id} = this.props.match.params;
         fetch(`${API_HOST}/task/${id}`, {
             method:"DELETE"
@@ -89,30 +72,16 @@ export default class SingleTask extends Component {
         })
         .catch(error => {
             console.log("Delete task reques error", error)
-            this.setState({
-                isOpenSpinner:false,
-            })
+            this.props.setOrRemoveSpinner(false)
+
            
         })
     }
 
     render() {
-        const {
-            isOpenTaskModal,
-            singleTask,
-            isOpenSpinner
-        } = this.state
-        if(this.state.singleTask == null) return   <div style={{textAlign:"center",
-                                                                fontSize:"30px",
-                                                                textShadow:" 2px 2px 4px #000000",
-                                                                fontWeight: "bold",
-                                                                color:"red"
-                                                            }}
-                                                    >
-                                                                                                        
-                                                         Please Wait...
-                                                         <Spinner/>
-                                                    </div>  
+        const {singleTask, isOpenSpinner, isOpenTaskModal} = this.props
+            
+        if(singleTask == null) return   <Spinner/>
         return (
             <div>
                 <h1 style={{color:'black'}}>Single Task</h1>
@@ -125,8 +94,8 @@ export default class SingleTask extends Component {
                    
                 </div>
                 <div className = {styles.singleTaskStyle}>
-                    <p style={{textAlign:'center', fontSize:'25px', marginBottom:'20px'}}>Title: {this.state.singleTask.title}</p>
-                    <p style={{textAlign:'center', fontSize:'25px'}}>Descriptions: {this.state.singleTask.description}</p>
+                    <p style={{textAlign:'center', fontSize:'25px', marginBottom:'20px'}}>Title: {singleTask.title}</p>
+                    <p style={{textAlign:'center', fontSize:'25px'}}>Descriptions: {singleTask.description}</p>
                 <div  style={{textAlign:'center', marginTop:'25px'}}> 
                 <Button
                     variant="danger"
@@ -137,7 +106,8 @@ export default class SingleTask extends Component {
                 <FontAwesomeIcon icon={faTrash} />
                 </Button>
                 <Button
-                    onClick={this.toggleOpenTaskModal}
+           
+                onClick={this.props.toggleOpenModal}
                     variant="warning"
                     className="ml-3"
                 >
@@ -147,7 +117,7 @@ export default class SingleTask extends Component {
             </div>
             {isOpenTaskModal && <AddEditTaskModal
                     onSubmit= {this.handleEditTask}
-                    onHide={this.toggleOpenTaskModal}
+                    onHide={this.props.toggleOpenModal}
                     editableTask={singleTask}
                 />}
                 {isOpenSpinner && <Spinner/>}
@@ -157,7 +127,38 @@ export default class SingleTask extends Component {
     }
   
 }
+
+
+const mapStateToProps = (state) => {
+    
+    return{
+        singleTask: state.singleTasks.singleTask,
+        isOpenTaskModal:state.singleTasks.isOpenTaskModal,
+        isOpenSpinner:state.isOpenSpinner,
+        
+    }
+}
+
+const mapDispatchToProps = (dispatch) => {
+    return{
+        setSingleTask:(data) => {
+            dispatch({type:"SET_SINGLE_TASK", data})
+        },
+        toggleOpenModal:() => {
+            dispatch({type:"TOGGLE_MODAL",})
+        },
+        setOrRemoveSpinner:(isOpenSpinner) => {
+                dispatch({type:"SET_OR_REMOVE_SPINNER", isOpenSpinner})
+         }, 
+        setOrRemoveModal:(isOpenTaskModal) => {
+            dispatch({type:"SET_OR_REMOVE_MODAL", isOpenTaskModal})
+         }
+        
+    }
+}
+
 SingleTask.propTypes = {
     history:PropTypes.object.isRequired,
     match:PropTypes.object.isRequired
 }
+export default connect(mapStateToProps, mapDispatchToProps)(SingleTask)
