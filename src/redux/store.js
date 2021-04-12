@@ -59,7 +59,7 @@ const reduser = (state = initialState, action) => {
             }
         }
         //ToDO
-        case "SET_TASKS": {
+        case Types.SET_TASKS: {
             return {
                 ...state,
                 todoState: {
@@ -68,7 +68,7 @@ const reduser = (state = initialState, action) => {
                 }
             }
         }
-        case "SET_OR_REMOVE_ADD_MODAL":{
+        case Types.SET_OR_REMOVE_ADD_MODAL:{
             return {
                 ...state,
                 todoState: {
@@ -77,7 +77,7 @@ const reduser = (state = initialState, action) => {
                 }
             }
         }
-        case "ADD_TASK":{
+        case Types.ADD_TASK:{
             const task = [...state.todoState.task];
             task.push(action.data);
             
@@ -90,7 +90,7 @@ const reduser = (state = initialState, action) => {
                 }
             }
         }
-        case "DELETE_TASK_MODAL":{
+        case Types.DELETE_TASK_MODAL:{
             const { checkedTasks, task } = state.todoState;
             let oneCheckedTask = null;
             if (checkedTasks.size === 1) {
@@ -106,7 +106,7 @@ const reduser = (state = initialState, action) => {
             }
     
         }        
-        case "DELETE_ONE_TASK":{
+        case Types.DELETE_ONE_TASK:{
             let task = state.todoState.task;
             task = task.filter(task => task._id !== action._id)
             return{
@@ -118,7 +118,7 @@ const reduser = (state = initialState, action) => {
                 } 
             }
         }
-        case "EDIT_TASK":{
+        case Types.EDIT_TASK:{
                 const task = state.todoState.task;
                 const idx = task.findIndex(task => task._id === action.data._id);
                 task[idx] = action.data;
@@ -134,7 +134,7 @@ const reduser = (state = initialState, action) => {
                     }
                 }   
         }
-        case "TOGGLE_SET_EDITABLE_TASK":{
+        case Types.TOGGLE_SET_EDITABLE_TASK:{
             return{
             ...state,
             todoState: {
@@ -143,7 +143,7 @@ const reduser = (state = initialState, action) => {
                 }
             }
         }
-        case "CHECKED_TASKS":{
+        case Types.CHECKED_TASKS:{
            const {_id} = action;
             let checkedTasks = new Set(state.todoState.checkedTasks);
             if(!checkedTasks.has(_id)){
@@ -161,7 +161,7 @@ const reduser = (state = initialState, action) => {
                
             }
             
-        } case "DELETE_CHECKED_TASKS":{
+        } case Types.DELETE_CHECKED_TASKS:{
             let task = state.todoState.task;   
             task = task.filter(task => !state.todoState.checkedTasks.has(task._id));
            
@@ -170,12 +170,12 @@ const reduser = (state = initialState, action) => {
                 todoState: {
                     ...state.todoState,
                     task,
-                    checkedTasks:new Set()
+                    checkedTasks:new Set(),
                     }
                
             }
         }
-        case "TOGGLE_CHECK_ALL":{
+        case Types.TOGGLE_CHECK_ALL:{
             const {task} = state.todoState
             let checkedTasks = new Set(state.todoState.checkedTasks)
             if(task.length === checkedTasks.size){

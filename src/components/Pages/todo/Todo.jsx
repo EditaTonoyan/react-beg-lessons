@@ -6,144 +6,22 @@ import AddEditTaskModal from '../../AddEditTaskModal/AddEditTaskModal'
 import ConfirModal from '../../deleteTaskModal/ConfirModal';
 import Spinner from '../SingleTaskPage/Spinner/Spinner';
 import {connect} from 'react-redux';
+import Types from '../../../redux/actionTypes';
+import {
+        getTaskThunk,
+        addToDoTask,
+        deleteOneTask,
+        deleteCheckedTask,
+        editToDoTaskThunk
+    } from '../../../redux/action';
 
-
-const API_HOST = "http://localhost:3001";
 class Todo extends Component {
 
-
-    handleEditTask = async(editableTask) => {
-            try{
-                const _id = editableTask._id
-                this.props.setOrRemoveSpinner(true)
-                const res = await fetch (`${API_HOST}/task/${_id}`,{
-                    method:"PUT",
-                    body:JSON.stringify(editableTask),
-                    headers: {
-                        "Content-Type": "application/json"
-                    }
-                });
-                const data = await res.json();
-                if(data.error){
-                    throw data.error
-                }else{ 
-                    this.props.editTask(data)
-                }
-            
-                }catch( error)  {
-                    console.log("edit task error", error)
-                }finally{
-                    this.props.setOrRemoveSpinner(false)
-
-                }
-    }
-
-    handleAddTask = (formData) => {
-        this.props.setOrRemoveSpinner(true)
-
-        fetch(`${API_HOST}/task`,{
-            method:"POST",
-            body:JSON.stringify(formData),
-            headers: {
-                "Content-Type": "application/json"
-            }
-        })
-        .then(res => res.json())
-        .then(data=> {
-            if(data.error){
-                throw data.error  
-            }else{
-                this.props.addTask(data)
-            }
-          
-
-        })
-        .catch(error=> {
-            console.log("error", error)
-        })
-        .finally(()=>{
-            this.props.setOrRemoveSpinner(false)
-
-        })
-     
-
-    }
-
     componentDidMount() {
-        this.props.setOrRemoveSpinner(true)
-
-        fetch(`${API_HOST}/task`)
-            .then(res => res.json())
-            .then(data => {
-                if (data.error)
-                    throw data.error;
-                this.props.setTask(data)
-            })
-            .catch(error => {
-                console.log("Get All Tasks ", error);
-            })
-            .finally(()=>{
-                this.props.setOrRemoveSpinner(false)
-
-            })
+        this.props.setTask()
     }
  
-    handleDeletetask = async(_id) => {
-           try{
-              
-            this.props.setOrRemoveSpinner(true)
-
-                let response = await fetch(`${API_HOST}/task/${_id}`,{
-                method:"DELETE"
-                });
-                let result = await response.json();
-                if(result.error){
-                    throw result.error
-                }else{
-                   this.props.deleteOneTask(_id)
-                }
-           }catch(error){
-            console.log("error delete task", error)
-           }finally{
-            this.props.setOrRemoveSpinner(false)
-
-           }
-    }
-
     
-    handleDeleteCheckedTask = () => {
-        
-        const {checkedTasks} = this.props;
-        this.props.setOrRemoveSpinner(true)
-
-        fetch(`${API_HOST}/task`,{
-            method:"PATCH",
-            body: JSON.stringify({ tasks: Array.from(checkedTasks) }),
-            headers:{
-                "Content-Type": "application/json"
-            }
-            
-        })
-        .then(res => res.json())
-        .then(data =>{
-           if(data.error){
-               throw data.error
-           }else{
-                this.props.deleteCheckedTask()
-
-           } 
-        })
-        .catch(error => {
-            console.log("delete All Task Error", error)
-        })
-        .finally(() => {
-            this.props.setOrRemoveSpinner(false)
-
-        })
-       
-        
-    }
-
     render() {
         
         const {
@@ -163,7 +41,7 @@ class Todo extends Component {
                         < Task task={task}
                         isChecked = {checkedTasks.has(task._id)}
                         isAnyTaskChecked = {!!checkedTasks.size}
-                        handleDeletetask = {this.handleDeletetask}
+                        handleDeletetask = {this.props.deleteOneTask}
                         handlecheckedTasks = {this.props.handlecheckedTasks}
                         handleCheckAll = {this.handleCheckAll}
                         getEditableTask = {this.props.toggleSetEditableTask}
@@ -207,7 +85,6 @@ class Todo extends Component {
                     <Button 
                       style = {{display:!!task.length ? 'block' : 'none' }}
                       variant = "danger"
-                      onClick = {this.handleDeleteCheckedTask}
                       disabled = {!!!checkedTasks.size}
                       onClick = {this.props.toggleOpenDeleteTaskModal}
                       
@@ -234,7 +111,7 @@ class Todo extends Component {
 
             {isOpenDeleteTaskModal && <ConfirModal
                                           onHide = {this.props.toggleOpenDeleteTaskModal}
-                                          handleDeleteCheckedTask = {this.handleDeleteCheckedTask}
+                                          handleDeleteCheckedTask = {() => this.props.deleteCheckedTask(checkedTasks)}
                                           countOrTaskName = {oneCheckedTask ? oneCheckedTask.title : checkedTasks.size}
             />}
 
@@ -242,14 +119,14 @@ class Todo extends Component {
                 {
                     isOpenAddTaskModal && <AddEditTaskModal
                         onHide={this.props.setOrRemoveModal}
-                        onSubmit={this.handleAddTask}
+                        onSubmit={this.props.addTask}
                     />
                 }
 
                 {
                     editableTask && <AddEditTaskModal
                         onHide={this.props.toggleSetEditableTask}
-                        onSubmit={this.handleEditTask}
+                        onSubmit={this.props.editTask}
                         editableTask={editableTask}
                     />
                 }
@@ -274,41 +151,41 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) =>{
     return{
-       setTask:(data) => {
-           dispatch({type:"SET_TASKS", data})
+       setTask:() => {
+           dispatch(getTaskThunk)
        },
        setOrRemoveSpinner:(isOpenSpinner) => {
-        dispatch({type:"SET_OR_REMOVE_SPINNER", isOpenSpinner})
+        dispatch({type:Types.SET_OR_REMOVE_SPINNER, isOpenSpinner})
        },
        setOrRemoveModal:() => {
-        dispatch({type: "SET_OR_REMOVE_ADD_MODAL"})
+        dispatch({type: Types.SET_OR_REMOVE_ADD_MODAL})
        },
-        addTask:(data) => {
-        dispatch({type:  "ADD_TASK", data})
+        addTask:(formData) => {
+        dispatch((dispatch) => addToDoTask(dispatch, formData))
        },
        toggleOpenDeleteTaskModal:() => {
-        dispatch({type:"DELETE_TASK_MODAL"})
+        dispatch({type:Types.DELETE_TASK_MODAL})
        },
        deleteOneTask:(_id) => {
-        dispatch({type:"DELETE_ONE_TASK",_id})
+        dispatch((dispatch) => deleteOneTask(dispatch, _id))
        },
-       editTask:(data) => {
-        dispatch({type: "EDIT_TASK", data})
+       editTask:(editableTask) => {
+        dispatch((dispatch)=> editToDoTaskThunk(dispatch, editableTask))
        },
     
        toggleSetEditableTask:(data) => {
-           dispatch({type:"TOGGLE_SET_EDITABLE_TASK", data})
+           dispatch({type:Types.TOGGLE_SET_EDITABLE_TASK, data})
        },
        handlecheckedTasks:(_id) => {
-        dispatch({type:"CHECKED_TASKS", _id})
+        dispatch({type:Types.CHECKED_TASKS, _id})
 
        },
-       deleteCheckedTask:() => {
-        dispatch({type:"DELETE_CHECKED_TASKS"})
+       deleteCheckedTask:(checkedTasks) => {
+        dispatch((dispatch) => deleteCheckedTask(dispatch,checkedTasks))
 
        },
        handleToggleCheckAll:() => {
-        dispatch({type:"TOGGLE_CHECK_ALL"})
+        dispatch({type:Types.TOGGLE_CHECK_ALL})
 
        },
    
