@@ -31,21 +31,21 @@ const router = [
     component:AboutUs,
     exact: true
   },
-  {
-    path: "/task/:id",
-    component:SingleTaskWithReducer,
-    exact: true
-  }, 
+  // {
+  //   path: "/task/:id",
+  //   component:SingleTaskWithReducer,
+  //   exact: true
+  // }, 
   // {
   //   path: "/task/:id",
   //   component:SingleTaskForContext,
   //   exact: true
   // },
-  //  {
-  //   path: "/task/:id",
-  //   component:SingleTask,
-  //   exact: true
-  // },
+   {
+    path: "/task/:id",
+    component:SingleTask,
+    exact: true
+  },
   {
     path: "/error/:status",
     component:NotFound,

@@ -1,4 +1,5 @@
-import {createStore} from 'redux';
+import { createStore, applyMiddleware } from 'redux';
+import thunk from 'redux-thunk';
 
 const initialState = {
     singleTasks:{
@@ -201,7 +202,7 @@ const reduser = (state = initialState, action) => {
      
 
 
-const store = createStore(reduser);
+const store = createStore(reduser,applyMiddleware(thunk));
 window.store = store;
 
 export default store;

@@ -8,80 +8,25 @@ import AddEditTaskModal from '../../AddEditTaskModal/AddEditTaskModal';
 import {Link} from 'react-router-dom';
 import Spinner from './Spinner/Spinner';
 import PropTypes from 'prop-types';
-import {createSingleTaskContext} from '../../context/context'
+import {setDataThunk,editTaskThunk,deleteTaskThunk} from '../../../redux/action'
 
-const API_HOST = "http://localhost:3001";
 class SingleTask extends Component {
 
-    handleEditTask = (task) => {
-        this.props.setOrRemoveSpinner(true)
-
-        fetch(`${API_HOST}/task/${task._id}`, {
-            method:"PUT",
-            body: JSON.stringify(task),
-            headers: {
-                "Content-Type": "application/json"
-            }
-        })
-        .then(res => res.json())
-        .then(data => {
-            if(data.error) throw data.error
-            this.props.setSingleTask(data);
-            this.props.setOrRemoveModal(false)
-            
-
-        })
-        .catch(error=>{
-            this.props.setOrRemoveModal(true)
-            console.log("edit task request error", error)
-        })
-        .finally(() => {
-            this.props.setOrRemoveSpinner(false)
-
-        })
-    }
-
     componentDidMount() {
-        const {id} = this.props.match.params;
-        fetch(`${API_HOST}/task/${id}`)
-            .then(res => res.json())
-            .then(data => {
-                if (data.error)
-                    throw data.error;
-                    this.props.setSingleTask(data);
-
-            })
-            .catch(error => {
-                this.props.history.push(`/error/${error.status}`, error.message)
-                console.log("Single task reques erstror ", error);
-            })
+       const props = this.props;
+       this.props.setSingleTask(props);
+     
     }
 
     deleteTask = () => {
-        this.props.setOrRemoveSpinner(true)
-        
-        const {id} = this.props.match.params;
-        fetch(`${API_HOST}/task/${id}`, {
-            method:"DELETE"
-        })
-        .then(res => res.json())
-        .then(data => {
-            if(data.error) throw data.error
-            this.props.history.push("/");
-            
-        })
-        .catch(error => {
-            console.log("Delete task reques error", error)
-            this.props.setOrRemoveSpinner(false)
-
-           
-        })
-    }
+        const props = this.props;
+        this.props.deleteSingleTask(props);
+     }
 
     render() {
         const {singleTask, isOpenSpinner, isOpenTaskModal} = this.props
             
-        if(singleTask == null) return   <Spinner/>
+        if(singleTask === null) return   <Spinner/>
         return (
             <div>
                 <h1 style={{color:'black'}}>Single Task</h1>
@@ -116,7 +61,7 @@ class SingleTask extends Component {
             </div>
             </div>
             {isOpenTaskModal && <AddEditTaskModal
-                    onSubmit= {this.handleEditTask}
+                    onSubmit= {this.props.editSingleTask}
                     onHide={this.props.toggleOpenModal}
                     editableTask={singleTask}
                 />}
@@ -127,7 +72,6 @@ class SingleTask extends Component {
     }
   
 }
-
 
 const mapStateToProps = (state) => {
     
@@ -140,9 +84,19 @@ const mapStateToProps = (state) => {
 }
 
 const mapDispatchToProps = (dispatch) => {
+   
     return{
-        setSingleTask:(data) => {
-            dispatch({type:"SET_SINGLE_TASK", data})
+        
+        setSingleTask:(props) => {
+            dispatch((dispatch) => setDataThunk(dispatch, props))
+        },
+
+        editSingleTask: (task) => {
+            dispatch((dispatch) => editTaskThunk(dispatch, task))
+        },
+
+        deleteSingleTask: (props) => {
+            dispatch((dispatch) => deleteTaskThunk(dispatch, props))
         },
         toggleOpenModal:() => {
             dispatch({type:"TOGGLE_MODAL",})
