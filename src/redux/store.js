@@ -1,5 +1,6 @@
 import { createStore, applyMiddleware } from 'redux';
 import thunk from 'redux-thunk';
+import Types from '../redux/actionTypes'
 
 const initialState = {
     singleTasks:{
@@ -23,7 +24,7 @@ const initialState = {
 const reduser = (state = initialState, action) => {
     switch(action.type){
         //Single Task
-        case "SET_SINGLE_TASK":{
+        case Types.SET_SINGLE_TASK:{
             return{
                 ...state,
                 singleTasks:{
@@ -32,7 +33,7 @@ const reduser = (state = initialState, action) => {
                 }
             }
         }
-        case "TOGGLE_MODAL":{
+        case Types.TOGGLE_MODAL:{
             return{
                 ...state,
                 singleTasks:{
@@ -41,13 +42,13 @@ const reduser = (state = initialState, action) => {
                 }
             }
         }
-        case "SET_OR_REMOVE_SPINNER":{
+        case Types.SET_OR_REMOVE_SPINNER:{
             return{
                 ...state,
                 isOpenSpinner:action.isOpenSpinner
             }
         }
-        case "SET_OR_REMOVE_MODAL":{
+        case Types.SET_OR_REMOVE_MODAL:{
             return{
                 ...state,
                 singleTasks:{

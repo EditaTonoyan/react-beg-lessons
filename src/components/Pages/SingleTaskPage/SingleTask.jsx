@@ -8,7 +8,9 @@ import AddEditTaskModal from '../../AddEditTaskModal/AddEditTaskModal';
 import {Link} from 'react-router-dom';
 import Spinner from './Spinner/Spinner';
 import PropTypes from 'prop-types';
-import {setDataThunk,editTaskThunk,deleteTaskThunk} from '../../../redux/action'
+import {createSingleTaskContext} from '../../context/context';
+import {setDataThunk,editTaskThunk,deleteTaskThunk} from '../../../redux/action';
+import Types from '../../../redux/actionTypes';
 
 class SingleTask extends Component {
 
@@ -99,13 +101,13 @@ const mapDispatchToProps = (dispatch) => {
             dispatch((dispatch) => deleteTaskThunk(dispatch, props))
         },
         toggleOpenModal:() => {
-            dispatch({type:"TOGGLE_MODAL",})
+            dispatch({type:Types.TOGGLE_MODAL,})
         },
         setOrRemoveSpinner:(isOpenSpinner) => {
-                dispatch({type:"SET_OR_REMOVE_SPINNER", isOpenSpinner})
+                dispatch({type:Types.SET_OR_REMOVE_SPINNER, isOpenSpinner})
          }, 
         setOrRemoveModal:(isOpenTaskModal) => {
-            dispatch({type:"SET_OR_REMOVE_MODAL", isOpenTaskModal})
+            dispatch({type: Types.SET_OR_REMOVE_MODAL, isOpenTaskModal})
          }
         
     }

@@ -1,5 +1,8 @@
+import Types from '../redux/actionTypes'
 const API_HOST = "http://localhost:3001";
+
 //SINGLETASK
+
 export const setDataThunk = (dispatch, props) => {
      const {id} = props.match.params;
      fetch(`${API_HOST}/task/${id}`)
@@ -7,7 +10,7 @@ export const setDataThunk = (dispatch, props) => {
         .then(data => {
             if (data.error)
                 throw data.error;
-                dispatch({ type: "SET_SINGLE_TASK", data });
+                dispatch({ type: Types.SET_SINGLE_TASK, data });
 
         })
         .catch(error => {
@@ -17,7 +20,7 @@ export const setDataThunk = (dispatch, props) => {
 }
 
 export const editTaskThunk = (dispatch, task) => {
-    dispatch({type:"SET_OR_REMOVE_SPINNER", isOpenSpinner:true})
+    dispatch({type:Types.SET_OR_REMOVE_SPINNER, isOpenSpinner:true})
 
         fetch(`${API_HOST}/task/${task._id}`, {
             method:"PUT",
@@ -29,23 +32,23 @@ export const editTaskThunk = (dispatch, task) => {
         .then(res => res.json())
         .then(data => {
             if(data.error) throw data.error
-            dispatch({ type: "SET_SINGLE_TASK", data });
-            dispatch({type:"SET_OR_REMOVE_MODAL", isOpenTaskModal:false})
+            dispatch({ type: Types.SET_SINGLE_TASK, data });
+            dispatch({type:Types.SET_OR_REMOVE_MODAL, isOpenTaskModal:false})
             
 
         })
         .catch(error=>{
-            dispatch({type:"SET_OR_REMOVE_SPINNER", isOpenSpinner:false})
-            dispatch({type:"SET_OR_REMOVE_MODAL", isOpenTaskModal:true})
+            dispatch({type:Types.SET_OR_REMOVE_SPINNER, isOpenSpinner:false})
+            dispatch({type:Types.SET_OR_REMOVE_MODA, isOpenTaskModal:true})
             console.log("edit task request error", error)
         })
         .finally(() => {
-            dispatch({type:"SET_OR_REMOVE_SPINNER", isOpenSpinner:false})
+            dispatch({type:Types.SET_OR_REMOVE_SPINNER, isOpenSpinner:false})
 
         })
 }
 export const deleteTaskThunk = (dispatch, props) => {
-    dispatch({type:"SET_OR_REMOVE_SPINNER", isOpenSpinner:true})
+    dispatch({type:Types.SET_OR_REMOVE_SPINNER, isOpenSpinner:true})
         
         const {id} = props.match.params;
         fetch(`${API_HOST}/task/${id}`, {
@@ -59,7 +62,7 @@ export const deleteTaskThunk = (dispatch, props) => {
         })
         .catch(error => {
             console.log("Delete task reques error", error)
-            dispatch({type:"SET_OR_REMOVE_SPINNER", isOpenSpinner:false})
+            dispatch({type:Types.SET_OR_REMOVE_SPINNER, isOpenSpinner:false})
 
            
         })
