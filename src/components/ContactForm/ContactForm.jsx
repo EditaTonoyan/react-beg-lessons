@@ -1,8 +1,11 @@
-import React, { Component } from 'react';
+import{ useEffect } from 'react';
 import {Form, Button} from 'react-bootstrap';
 import { withRouter } from 'react-router-dom';
-import Spinner from '../Spinner/Spinner';
+import Spinner from '../Pages/SingleTaskPage/Spinner/Spinner'
 import styles from './contactForm.module.css';
+import {connect} from 'react-redux';
+import Types  from '../../redux/actionTypes';
+import  {submitCotactFormThunk} from '../../redux/action'
 //validation
 import {isRequired,maxLength,minLength,validateEmail} from '../../Helpers/Validators';
 const inputs = [
@@ -26,122 +29,40 @@ const inputs = [
     },
 ]
 
-let maxLength20 = maxLength(30);
-let minLength6 = minLength(1)
-const API_HOST = "http://localhost:3001";
- class ContactForm extends Component {
-    constructor(props) {
-        super(props)
-    
-        this.state = {
-            message: {
-                valid:false,
-                error:null,
-                value:""
-            },
-            name: {
-                valid:false,
-                error:null,
-                value:""
-            },
-            email: {
-                valid:false,
-                error:null,
-                value:""
-            },
-        
-            isLoading:false,
-            errorMessage:""
-        }
-    }
-   
-    handleChange = (e) => {
-    const {name, value} = e.target
-    let valid = true;
-    let error = null;
-    // if(isRequired(value)){
-    //     valid = false
-    //     error = isRequired(value)
-    // }else if (maxLength20(value)){
-    //     valid = false
-    //     error = maxLength20(value)
-    // }else if(minLength6(value)){
-    //     valid = false
-    //     error = minLength6(value)
-    // }else if (name === 'email' && validateEmail(value)){
-    //     valid = false
-    //     error = validateEmail(value)
-    // }
+ const ContactForm = (props) => {
+     useEffect(() => {
+         
+         return () => {
+            props.resetState()
+         }
+     }, [])
+        const {
+            data,
+            errorMessage,
+            isOpenSpinner,
+            //FUNCTION
+            handleChange,
+            handleSubmit,
+            } = props
 
-    error = isRequired(value) || maxLength20(value) || minLength6(value) || name === 'email' && validateEmail(value)
-    if(error){
-        valid = false
-    }
-    
-        this.setState({
-            [name]: {
-                valid: valid,
-                error: error,
-                value: value
-            }
-        })
-
-    }
-
-    handleSubmit = () => {
-        const formData = ({...this.state})
-        for (let key in formData) {
-            if(typeof formData[key] === "object" && formData[key].hasOwnProperty("value")){
-                formData[key] = formData[key].value;
-            }else{
-            delete formData[key];
-            }
-        }
-       
-
-       this.setState({isLoading:true, errorMessage:""})        
-        fetch(`${API_HOST}/form`, {
-            method: "POST",
-            body: JSON.stringify(formData),
-            headers: {
-                "Content-Type": "application/json"
-            }
-        })
-            .then(res => res.json())
-            .then(data => {
-                if (data.error)
-                    throw data.error;
-                this.props.history.push("/");
-            })
-            .catch(error => {
-                // console.log(error.message)
-                this.setState({ isLoading: false, errorMessage:error.message});
-                console.log("Form Contact Request Error", error);
-            });
-
-           
-    }
-    render() { 
-        let error = this.state.errorMessage
-        let message =  error.split('').splice(6, 49).join('');
-        let errorMessage = message.charAt(0).toUpperCase() + message.slice(1);
-
-        const {isLoading} = this.state
-        const inputForms = inputs.map((input, index)=>{
+            let error = props.errorMessage
+            let message =  error.split('').splice(6, 49).join('');
+            let errormessage = message.charAt(0).toUpperCase() + message.slice(1);
             
+        const inputForms = inputs.map((input, index)=>{
             return (
                  <Form.Group key = {index}>
                     <Form.Control 
                         name={input.name}
                         type={input.type}
                         placeholder={input.placeholder}
-                        value={this.state[input.name].value}
+                        value={[input.name].value}
                         as={input.as || undefined}
                         rows={input.rows || undefined}
-                        onChange={this.handleChange}
+                        onChange={(e)=>handleChange(e.target)}
 
                     />
-                    <Form.Text style={{marginTop:"10px", marginLeft:"200px", color:"red"}}>{this.state[input.name].error}</Form.Text>
+                    <Form.Text style={{marginTop:"10px", marginLeft:"200px", color:"red"}}>{[input.name].error}</Form.Text>
                 </Form.Group>
                 
             )
@@ -157,7 +78,7 @@ const API_HOST = "http://localhost:3001";
                 >
                     {errorMessage &&
                     <p className={styles.errorMessage} >
-                        {errorMessage }
+                        {errormessage }
                      </p>
                     }
                     
@@ -165,7 +86,7 @@ const API_HOST = "http://localhost:3001";
                     {inputForms}
 
                     <Button 
-                        onClick={this.handleSubmit}
+                        onClick={()=>handleSubmit(data, props.history)}
                         variant="primary" 
                         type="submit"
                         style={{marginLeft:"50%"}}
@@ -174,10 +95,38 @@ const API_HOST = "http://localhost:3001";
                     </Button>
                    
                 </Form>
+                {isOpenSpinner && <Spinner/>}
                
-                {isLoading  && <Spinner/>}
+              
             </div>
         )
     }
+
+const mapStateToProps = (state) => {
+ return{
+    errorMessage:state.contactformState.errorMessage,
+    isOpenSpinner:state.globalState.isOpenSpinner,
+    data:{
+        name:state.contactformState.name,
+        email:state.contactformState.email,
+        message:state.contactformState.message,
+    }
+  }
 }
-export default withRouter(ContactForm)
+const mapDispatchToProps = (dispatch) => {
+    return{
+        handleChange:(target) => {
+            dispatch({type:Types.HANDLE_CHANGE, target})
+        },
+
+        handleSubmit:(data, history) =>{
+            dispatch((dispatch) => submitCotactFormThunk(dispatch,data, history) )
+        },
+        
+        resetState:() => {
+            dispatch({type:Types.RESET_FORM})
+        }
+        
+    }
+   }
+export default withRouter(connect(mapStateToProps, mapDispatchToProps)(ContactForm))

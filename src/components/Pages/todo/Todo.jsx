@@ -1,4 +1,5 @@
-import React, { Component } from 'react';
+import React from 'react';
+import {useEffect} from 'react'
 import Task from '../../Task/Task';
 import styles from './Todo.module.css';
 import { Col, Container, Row, Button} from 'react-bootstrap';
@@ -12,18 +13,20 @@ import {
         addToDoTask,
         deleteOneTask,
         deleteCheckedTask,
-        editToDoTaskThunk
+        editTaskThunk
     } from '../../../redux/action';
 
-class Todo extends Component {
-
-    componentDidMount() {
-        this.props.setTask()
+const Todo = (props) => {
+useEffect(() => {
+    props.setTask()
+    return () => {
+        props.resretData()
     }
+}, [])
+    
  
     
-    render() {
-        
+    
         const {
                 task,
                 isOpenAddTaskModal,
@@ -32,7 +35,7 @@ class Todo extends Component {
                 editableTask,
                 checkedTasks,
                 oneCheckedTask
-            } = this.props
+            } = props
         const newTask = task.map(task => {
             return (<Col 
                         className = "mt-3"
@@ -41,10 +44,9 @@ class Todo extends Component {
                         < Task task={task}
                         isChecked = {checkedTasks.has(task._id)}
                         isAnyTaskChecked = {!!checkedTasks.size}
-                        handleDeletetask = {this.props.deleteOneTask}
-                        handlecheckedTasks = {this.props.handlecheckedTasks}
-                        handleCheckAll = {this.handleCheckAll}
-                        getEditableTask = {this.props.toggleSetEditableTask}
+                        handleDeletetask = {props.deleteOneTask}
+                        handlecheckedTasks = {props.handlecheckedTasks}
+                        getEditableTask = {props.toggleSetEditableTask}
                         editableTask={editableTask}
                         />
                          
@@ -69,7 +71,7 @@ class Todo extends Component {
                     <Col>
                         <Button
                             style={{marginLeft:'50%'}}
-                            onClick = {this.props.setOrRemoveModal}
+                            onClick = {props.setOrRemoveModal}
                             disabled = {!!checkedTasks.size}
                         >
                             Click For Add
@@ -86,7 +88,7 @@ class Todo extends Component {
                       style = {{display:!!task.length ? 'block' : 'none' }}
                       variant = "danger"
                       disabled = {!!!checkedTasks.size}
-                      onClick = {this.props.toggleOpenDeleteTaskModal}
+                      onClick = {props.toggleOpenDeleteTaskModal}
                       
                     >
                         Delete All checked
@@ -97,7 +99,7 @@ class Todo extends Component {
                       style = {{display:!!task.length ? 'block' : 'none' }}
                       className="ml-5"
                       variant="primary"
-                      onClick = {this.props.handleToggleCheckAll}
+                      onClick = {props.handleToggleCheckAll}
                       disabled = {checkedTasks == ''}
                  
                     >
@@ -110,23 +112,23 @@ class Todo extends Component {
             </Container>
 
             {isOpenDeleteTaskModal && <ConfirModal
-                                          onHide = {this.props.toggleOpenDeleteTaskModal}
-                                          handleDeleteCheckedTask = {() => this.props.deleteCheckedTask(checkedTasks)}
+                                          onHide = {props.toggleOpenDeleteTaskModal}
+                                          handleDeleteCheckedTask = {() => props.deleteCheckedTask(checkedTasks)}
                                           countOrTaskName = {oneCheckedTask ? oneCheckedTask.title : checkedTasks.size}
             />}
 
 
                 {
                     isOpenAddTaskModal && <AddEditTaskModal
-                        onHide={this.props.setOrRemoveModal}
-                        onSubmit={this.props.addTask}
+                        onHide={props.setOrRemoveModal}
+                        onSubmit={props.addTask}
                     />
                 }
 
                 {
                     editableTask && <AddEditTaskModal
-                        onHide={this.props.toggleSetEditableTask}
-                        onSubmit={this.props.editTask}
+                        onHide={props.toggleSetEditableTask}
+                        onSubmit={props.editTask}
                         editableTask={editableTask}
                     />
                 }
@@ -135,16 +137,16 @@ class Todo extends Component {
             </div>
         )
     }
-}
+
 const mapStateToProps = (state) => {
     return{
-       task:state.todoState.task,
-       isOpenAddTaskModal:state.todoState.isOpenAddTaskModal,
-       isOpenSpinner:state.isOpenSpinner,
-       isOpenDeleteTaskModal:state.todoState.isOpenDeleteTaskModal,
-       editableTask:state.todoState.editableTask,
-       checkedTasks:state.todoState.checkedTasks,
-       oneCheckedTask:state.todoState.oneCheckedTask
+       task:state.toDoState.task,
+       isOpenAddTaskModal:state.toDoState.isOpenAddTaskModal,
+       isOpenSpinner:state.globalStateisOpenSpinner,
+       isOpenDeleteTaskModal:state.toDoState.isOpenDeleteTaskModal,
+       editableTask:state.toDoState.editableTask,
+       checkedTasks:state.toDoState.checkedTasks,
+       oneCheckedTask:state.toDoState.oneCheckedTask
     }
     
 }
@@ -170,7 +172,7 @@ const mapDispatchToProps = (dispatch) =>{
         dispatch((dispatch) => deleteOneTask(dispatch, _id))
        },
        editTask:(editableTask) => {
-        dispatch((dispatch)=> editToDoTaskThunk(dispatch, editableTask))
+        dispatch((dispatch)=> editTaskThunk(dispatch, editableTask))
        },
     
        toggleSetEditableTask:(data) => {
@@ -188,6 +190,9 @@ const mapDispatchToProps = (dispatch) =>{
         dispatch({type:Types.TOGGLE_CHECK_ALL})
 
        },
+       resretData: () => {
+        dispatch({type:Types.RESET_DADA})
+       }
    
        
         

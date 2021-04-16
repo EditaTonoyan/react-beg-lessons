@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import { useEffect } from 'react';
 import {connect} from 'react-redux';
 import styles from './singleTask.module.css';
 import {Button} from 'react-bootstrap';
@@ -9,24 +9,21 @@ import {Link} from 'react-router-dom';
 import Spinner from './Spinner/Spinner';
 import PropTypes from 'prop-types';
 import {createSingleTaskContext} from '../../context/context';
-import {setDataThunk,editTaskThunk,deleteTaskThunk} from '../../../redux/action';
+import {setDataThunk,editTaskThunk,deleteOneTask} from '../../../redux/action';
 import Types from '../../../redux/actionTypes';
 
-class SingleTask extends Component {
+const SingleTask = (props) => {
+    const { history } = props;
+    const { id } = props.match.params;
 
-    componentDidMount() {
-       const props = this.props;
-       this.props.setSingleTask(props);
-     
-    }
 
-    deleteTask = () => {
-        const props = this.props;
-        this.props.deleteSingleTask(props);
-     }
+    useEffect(() => {
+        props.setSingleTask(id, history)
+        
+    }, [id, history])
 
-    render() {
-        const {singleTask, isOpenSpinner, isOpenTaskModal} = this.props
+  
+        const {singleTask, isOpenSpinner, isOpenTaskModal} = props
             
         if(singleTask === null) return   <Spinner/>
         return (
@@ -46,7 +43,7 @@ class SingleTask extends Component {
                 <div  style={{textAlign:'center', marginTop:'25px'}}> 
                 <Button
                     variant="danger"
-                    onClick={this.deleteTask}
+                    onClick={()=>props.deleteSingleTask(singleTask._id , history )}
                   
                 >
                     
@@ -54,7 +51,7 @@ class SingleTask extends Component {
                 </Button>
                 <Button
            
-                onClick={this.props.toggleOpenModal}
+                onClick={props.toggleOpenModal}
                     variant="warning"
                     className="ml-3"
                 >
@@ -63,8 +60,8 @@ class SingleTask extends Component {
             </div>
             </div>
             {isOpenTaskModal && <AddEditTaskModal
-                    onSubmit= {this.props.editSingleTask}
-                    onHide={this.props.toggleOpenModal}
+                    onSubmit= {(editableTask)=>props.editSingleTask(editableTask, "singleTask")}
+                    onHide={props.toggleOpenModal}
                     editableTask={singleTask}
                 />}
                 {isOpenSpinner && <Spinner/>}
@@ -73,14 +70,13 @@ class SingleTask extends Component {
         )
     }
   
-}
 
 const mapStateToProps = (state) => {
     
     return{
-        singleTask: state.singleTasks.singleTask,
-        isOpenTaskModal:state.singleTasks.isOpenTaskModal,
-        isOpenSpinner:state.isOpenSpinner,
+        singleTask: state.singleTaskState.singleTask,
+        isOpenTaskModal:state.singleTaskState.isOpenTaskModal,
+        isOpenSpinner:state.singleTaskState.isOpenSpinner,
         
     }
 }
@@ -89,16 +85,16 @@ const mapDispatchToProps = (dispatch) => {
    
     return{
         
-        setSingleTask:(props) => {
-            dispatch((dispatch) => setDataThunk(dispatch, props))
+        setSingleTask:(id, history) => {
+            dispatch((dispatch) => setDataThunk(dispatch, id, history))
         },
 
-        editSingleTask: (task) => {
-            dispatch((dispatch) => editTaskThunk(dispatch, task))
+        editSingleTask: (editableTask,singleTask) => {
+            dispatch((dispatch) => editTaskThunk(dispatch,editableTask,singleTask))
         },
 
-        deleteSingleTask: (props) => {
-            dispatch((dispatch) => deleteTaskThunk(dispatch, props))
+        deleteSingleTask: (_id,history) => {
+            dispatch((dispatch) => deleteOneTask(dispatch,_id, history))
         },
         toggleOpenModal:() => {
             dispatch({type:Types.TOGGLE_MODAL,})

@@ -2,70 +2,52 @@ import Types from '../redux/actionTypes'
 const API_HOST = "http://localhost:3001";
 
   //*****SINGLETASK*****
-export const setDataThunk = (dispatch, props) => {
-     const {id} = props.match.params;
+
+
+export const setDataThunk = (dispatch, id, history) => {
      fetch(`${API_HOST}/task/${id}`)
          .then(res => res.json())
         .then(data => {
             if (data.error)
                 throw data.error;
                 dispatch({ type: Types.SET_SINGLE_TASK, data });
+               
 
         })
         .catch(error => {
-            props.history.push(`/error/${error.status}`, error.message)
+            history.push(`/error/${error.status}`, error.message)
             console.log("Single task reques erstror ", error);
          })
 }
 
-export const editTaskThunk = (dispatch, task) => {
-    dispatch({type:Types.SET_OR_REMOVE_SPINNER, isOpenSpinner:true})
+// export const editTaskThunk = (dispatch, task) => {
+//     dispatch({type:Types.SET_OR_REMOVE_SPINNER, isOpenSpinner:true})
 
-        fetch(`${API_HOST}/task/${task._id}`, {
-            method:"PUT",
-            body: JSON.stringify(task),
-            headers: {
-                "Content-Type": "application/json"
-            }
-        })
-        .then(res => res.json())
-        .then(data => {
-            if(data.error) throw data.error
-            dispatch({ type: Types.SET_SINGLE_TASK, data });
-            dispatch({type:Types.SET_OR_REMOVE_MODAL, isOpenTaskModal:false})
+//         fetch(`${API_HOST}/task/${task._id}`, {
+//             method:"PUT",
+//             body: JSON.stringify(task),
+//             headers: {
+//                 "Content-Type": "application/json"
+//             }
+//         })
+//         .then(res => res.json())
+//         .then(data => {
+//             if(data.error) throw data.error
+//             dispatch({ type: Types.SET_SINGLE_TASK, data });
+//             dispatch({type:Types.SET_OR_REMOVE_MODAL, isOpenTaskModal:false})
             
 
-        })
-        .catch(error=>{
-            dispatch({type:Types.SET_OR_REMOVE_SPINNER, isOpenSpinner:false})
-            dispatch({type:Types.SET_OR_REMOVE_MODA, isOpenTaskModal:true})
-            console.log("edit task request error", error)
-        })
-        .finally(() => {
-            dispatch({type:Types.SET_OR_REMOVE_SPINNER, isOpenSpinner:false})
+//         })
+//         .catch(error=>{
+//             dispatch({type:Types.SET_OR_REMOVE_SPINNER, isOpenSpinner:false})
+//             dispatch({type:Types.SET_OR_REMOVE_MODA, isOpenTaskModal:true})
+//             console.log("edit task request error", error)
+//         })
+//         .finally(() => {
+//             dispatch({type:Types.SET_OR_REMOVE_SPINNER, isOpenSpinner:false})
 
-        })
-}
-export const deleteTaskThunk = (dispatch, props) => {
-    dispatch({type:Types.SET_OR_REMOVE_SPINNER, isOpenSpinner:true})
-        
-        const {id} = props.match.params;
-        fetch(`${API_HOST}/task/${id}`, {
-            method:"DELETE"
-        })
-        .then(res => res.json())
-        .then(data => {
-            if(data.error) throw data.error
-            props.history.push("/");
-            
-        })
-        .catch(error => {
-            console.log("Delete task reques error", error)
-            dispatch({type:Types.SET_OR_REMOVE_SPINNER, isOpenSpinner:false})
-
-           
-        })
-}
+//         })
+// }
 
     //*****TODO*****
 export const getTaskThunk = (dispatch) => {
@@ -115,7 +97,7 @@ export const addToDoTask = (dispatch, formData) => {
 
     })
 }
-export const deleteOneTask = async (dispatch, _id) => {
+export const deleteOneTask = async (dispatch,_id, history = null) => {
     try{
               
         dispatch({type:Types.SET_OR_REMOVE_SPINNER, isOpenSpinner:true})
@@ -127,7 +109,13 @@ export const deleteOneTask = async (dispatch, _id) => {
             if(result.error){
                 throw result.error
             }else{
-               dispatch({type:Types.DELETE_ONE_TASK, _id})
+                if(!history){
+                    dispatch({type:Types.DELETE_ONE_TASK, _id})
+                   
+                }else{
+                    history.push("/");
+
+                }
             }
        }catch(error){
         console.log("error delete task", error)
@@ -164,7 +152,8 @@ export const deleteCheckedTask = (dispatch, checkedTasks) => {
 
     })
 }
-export const editToDoTaskThunk = async(dispatch, editableTask) => {
+export const editTaskThunk = async(dispatch, editableTask, page= "todo") => {
+   
     try{
         const _id = editableTask._id
         dispatch({type:Types.SET_OR_REMOVE_SPINNER, isOpenSpinner:true})
@@ -179,6 +168,16 @@ export const editToDoTaskThunk = async(dispatch, editableTask) => {
         if(data.error){
             throw data.error
         }else{ 
+            if(page === "singleTask"){
+                dispatch({ type: Types.SET_SINGLE_TASK, data });
+                dispatch({type:Types.SET_OR_REMOVE_MODAL, isOpenTaskModal:false})
+
+            }else if(page === "todo"){
+            dispatch({type:Types.EDIT_TASK, data})
+                
+
+               
+            }
             dispatch({type:Types.EDIT_TASK, data})
         }
     
@@ -189,3 +188,37 @@ export const editToDoTaskThunk = async(dispatch, editableTask) => {
 
         }
 }
+//ContactForm
+export const submitCotactFormThunk = (dispatch, data, history) => {
+        for (let key in data) {
+            if(typeof data[key] === "object" && data[key].hasOwnProperty("value")){
+                data[key] = data[key].value;
+            }else{
+            delete data[key];
+            }
+        }
+       
+        dispatch({type:Types.SET_OR_REMOVE_SPINNER, isOpenSpinner:true})
+      dispatch({type:Types.ERROR_MESSAGE, errorMessage: ''})
+
+        fetch(`${API_HOST}/form`, {
+            method: "POST",
+            body: JSON.stringify(data),
+            headers: {
+                "Content-Type": "application/json"
+            }
+        })
+            .then(res => res.json())
+            .then(data => {
+                if (data.error)
+                    throw data.error;
+                history.push("/");
+            })
+            .catch(error => {
+            dispatch({type:Types.SET_OR_REMOVE_SPINNER, isOpenSpinner:false})
+            dispatch({type:Types.ERROR_MESSAGE, errorMessage: error.message})
+
+                
+                console.log("Form Contact Request Error", error);
+            });
+        }

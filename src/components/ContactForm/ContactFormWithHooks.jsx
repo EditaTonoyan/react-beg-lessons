@@ -3,6 +3,7 @@ import {Form, Button} from 'react-bootstrap';
 import { withRouter } from 'react-router-dom';
 import Spinner from '../Pages/SingleTaskPage/Spinner/Spinner';
 import styles from './contactForm.module.css';
+import {connect} from 'react-redux';
 import {isRequired,maxLength,minLength,validateEmail} from '../../Helpers/Validators';
 const inputs = [
     {
@@ -58,7 +59,11 @@ const ContactFormWithHooks = (props) => {
         let valid = true;
         let error = null;
     
-        error = isRequired(value) || maxLength20(value) || minLength6(value) || name === 'email' && validateEmail(value)
+        error = 
+            isRequired(value) || 
+            maxLength20(value) || 
+            minLength6(value) || 
+            name === 'email' && validateEmail(value)
         if(error){
             valid = false
         }
@@ -115,7 +120,7 @@ const ContactFormWithHooks = (props) => {
          if(errorMessage.errorMessage !== undefined){
              let error = errorMessage.errorMessage
              let message =  error.substring(6, error.length);
-              newMessage = message.charAt(0).toUpperCase() + message.slice(1)
+                newMessage = message.charAt(0).toUpperCase() + message.slice(1)
          }
          
         const inputForms = inputs.map((input, index)=>{
@@ -173,4 +178,4 @@ const ContactFormWithHooks = (props) => {
         </div>
     )
 }
-export default withRouter(ContactFormWithHooks)
+export default withRouter (ContactFormWithHooks)
