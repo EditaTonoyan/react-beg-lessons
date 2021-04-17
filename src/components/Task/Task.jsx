@@ -3,7 +3,7 @@ import React, { Component } from 'react';
 import styles from './Task.module.css';
 import {Card, Button, InputGroup} from 'react-bootstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faTrash, faEdit } from '@fortawesome/free-solid-svg-icons';
+import { faTrash, faEdit, faCheck,faHourglassHalf} from '@fortawesome/free-solid-svg-icons';
 import PropTypes from 'prop-types';
 // import GetDate from '../../Helpers/GetDate'
 import { withRouter,Link } from 'react-router-dom';
@@ -17,6 +17,7 @@ const Task = ({
                 isChecked, 
                 getEditableTask,
                 editableTask,
+                toggleStatus,
                 ...props}) => {
 
         const classes = [];
@@ -47,7 +48,7 @@ const Task = ({
                         <Card.Text  style={{color:"#495057"}} className="mb-3">{task.date.slice(0,10)}</Card.Text>
                         
                         <Button
-                            variant="danger"
+                            variant="outline-danger"
                             onClick={(e) => handleDeletetask(task._id)}
                             disabled={isAnyTaskChecked}
                         >
@@ -55,12 +56,21 @@ const Task = ({
                         </Button>
                             
                         <Button 
-                            variant="warning" 
+                            variant="outline-warning" 
                             className="ml-3"
                             disabled={isAnyTaskChecked}
                             onClick={() => getEditableTask(task)}
                         >
                             <FontAwesomeIcon icon={faEdit} />
+                        </Button>
+
+                        <Button 
+                            variant={task.status ==="done" ? "outline-success" : "outline-info" } 
+                            className="ml-3"
+                            onClick={() => toggleStatus(task)}
+                        >
+                           {task.status === "done" && <FontAwesomeIcon icon={faCheck} />}
+                           {task.status === "active" && <FontAwesomeIcon icon={faHourglassHalf} />}
                         </Button>
                     
                     </Card.Body>

@@ -1,8 +1,11 @@
 import './App.css';
 import{Route,Redirect,Switch} from 'react-router-dom';
-import React from 'react'
+import {useEffect} from 'react'
 import Navbar from './components/Navbar/Navbar';
 import Example from './components/ContactForm/ContactFormWithHooks';
+import {connect} from 'react-redux';
+import {ToastContainer, toast} from 'react-toastify';
+
 // PAGES
 import Todo from  './components/Pages/todo/Todo';
 import Contact from './components/Pages/Contact/Contact';
@@ -52,7 +55,34 @@ const router = [
     exact: true
   }
 ]
-export default function App() {
+ const App = (props) => {
+   const {errorMessage, successMessage } = props;
+
+   useEffect(() => {
+    errorMessage && toast.error(`🦄 ${errorMessage}`, {
+      position: "bottom-left",
+      autoClose: 5000,
+      hideProgressBar: false,
+      closeOnClick: true,
+      pauseOnHover: true,
+      draggable: true,
+      progress: undefined,
+      });
+   }, [errorMessage])
+
+
+   useEffect(() => {
+    successMessage && toast.success(`🦄 ${successMessage}`, {
+      position: "bottom-left",
+      autoClose: 5000,
+      hideProgressBar: false,
+      closeOnClick: true,
+      pauseOnHover: true,
+      draggable: true,
+      progress: undefined,
+      });
+   }, [successMessage])
+   
 
  const pages = router.map((page,index)=>{
 
@@ -97,7 +127,7 @@ export default function App() {
                {pages}
                <Redirect to="/error/404"/>
             </Switch>
-           
+           <ToastContainer/>
 
     </div>
 
@@ -105,7 +135,10 @@ export default function App() {
 
   
 }
- 
-
+const mapToStateProps = (state) => ({
+      errorMessage:state.globalState.errorMessage,
+      successMessage:state.globalState.successMessage
+})
+export default connect (mapToStateProps, null)(App)
 
 

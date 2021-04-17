@@ -13,7 +13,8 @@ import {
         addToDoTask,
         deleteOneTask,
         deleteCheckedTask,
-        editTaskThunk
+        editTaskThunk,
+        toggleStatusThunk
     } from '../../../redux/action';
 
 const Todo = (props) => {
@@ -24,9 +25,6 @@ useEffect(() => {
     }
 }, [])
     
- 
-    
-    
         const {
                 task,
                 isOpenAddTaskModal,
@@ -34,7 +32,9 @@ useEffect(() => {
                 isOpenDeleteTaskModal,
                 editableTask,
                 checkedTasks,
-                oneCheckedTask
+                oneCheckedTask,
+                toggleStatus
+                
             } = props
         const newTask = task.map(task => {
             return (<Col 
@@ -48,6 +48,7 @@ useEffect(() => {
                         handlecheckedTasks = {props.handlecheckedTasks}
                         getEditableTask = {props.toggleSetEditableTask}
                         editableTask={editableTask}
+                        toggleStatus={toggleStatus}
                         />
                          
                     </Col>)
@@ -142,11 +143,13 @@ const mapStateToProps = (state) => {
     return{
        task:state.toDoState.task,
        isOpenAddTaskModal:state.toDoState.isOpenAddTaskModal,
-       isOpenSpinner:state.globalStateisOpenSpinner,
+       isOpenSpinner:state.globalState.isOpenSpinner,
        isOpenDeleteTaskModal:state.toDoState.isOpenDeleteTaskModal,
        editableTask:state.toDoState.editableTask,
        checkedTasks:state.toDoState.checkedTasks,
-       oneCheckedTask:state.toDoState.oneCheckedTask
+       oneCheckedTask:state.toDoState.oneCheckedTask,
+       errorMessage:state.globalState.errorMessage,
+       successMessage:state.globalState.successMessage
     }
     
 }
@@ -178,6 +181,9 @@ const mapDispatchToProps = (dispatch) =>{
        toggleSetEditableTask:(data) => {
            dispatch({type:Types.TOGGLE_SET_EDITABLE_TASK, data})
        },
+       toggleStatus:(task)=>{
+           dispatch((dispatch)=>toggleStatusThunk(dispatch, task))
+       },
        handlecheckedTasks:(_id) => {
         dispatch({type:Types.CHECKED_TASKS, _id})
 
@@ -192,12 +198,7 @@ const mapDispatchToProps = (dispatch) =>{
        },
        resretData: () => {
         dispatch({type:Types.RESET_DADA})
-       }
-   
-       
-        
-      
-       
+       } 
       
        
 }

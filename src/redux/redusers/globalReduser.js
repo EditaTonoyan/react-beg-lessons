@@ -2,6 +2,8 @@ import Types from '../actionTypes';
 
 const initialState = {
     isOpenSpinner:false,
+    errorMessage:"",
+    successMessage:"",
 }
 
 const globalReduser = (state = initialState, action) => {
@@ -10,6 +12,18 @@ const globalReduser = (state = initialState, action) => {
             return{
                 ...state,
                 isOpenSpinner:action.isOpenSpinner
+            }
+        }
+        case Types.ERROR_MESSAGE:{
+            return{
+                 ...state,
+                 errorMessage:action.errorMessage
+            }
+        }
+        case Types.SUCCESS_MESSAGE:{
+            return{
+                 ...state,
+                 successMessage:action.successMessage
             }
         }
         default: return state

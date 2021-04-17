@@ -76,7 +76,10 @@ const mapStateToProps = (state) => {
     return{
         singleTask: state.singleTaskState.singleTask,
         isOpenTaskModal:state.singleTaskState.isOpenTaskModal,
-        isOpenSpinner:state.singleTaskState.isOpenSpinner,
+        // isOpenSpinner:state.singleTaskState.isOpenSpinner,
+        errorMessage:state.globalState.errorMessage,
+        successMessage:state.globalState.successMessage
+
         
     }
 }

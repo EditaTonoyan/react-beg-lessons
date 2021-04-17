@@ -1,4 +1,4 @@
-import{ useEffect } from 'react';
+import{ useEffect, useRef} from 'react';
 import {Form, Button} from 'react-bootstrap';
 import { withRouter } from 'react-router-dom';
 import Spinner from '../Pages/SingleTaskPage/Spinner/Spinner'
@@ -7,7 +7,6 @@ import {connect} from 'react-redux';
 import Types  from '../../redux/actionTypes';
 import  {submitCotactFormThunk} from '../../redux/action'
 //validation
-import {isRequired,maxLength,minLength,validateEmail} from '../../Helpers/Validators';
 const inputs = [
     {
         name:'name',
@@ -29,40 +28,50 @@ const inputs = [
     },
 ]
 
+
+
  const ContactForm = (props) => {
+
+    const {
+        data,
+        errorMessage,
+        isOpenSpinner,
+        //FUNCTION
+        handleChange,
+        handleSubmit,
+        } = props
+   
+     const firstInput = useRef(null)
+
      useEffect(() => {
-         
-         return () => {
-            props.resetState()
-         }
-     }, [])
-        const {
-            data,
-            errorMessage,
-            isOpenSpinner,
-            //FUNCTION
-            handleChange,
-            handleSubmit,
-            } = props
+        firstInput.current.focus()
+        return () => {
+           props.resetState()
+        }
+    }, [])
+
+       
 
             let error = props.errorMessage
             let message =  error.split('').splice(6, 49).join('');
             let errormessage = message.charAt(0).toUpperCase() + message.slice(1);
             
         const inputForms = inputs.map((input, index)=>{
+        
             return (
                  <Form.Group key = {index}>
                     <Form.Control 
+                        ref={index === 0 ? firstInput : null}
                         name={input.name}
                         type={input.type}
                         placeholder={input.placeholder}
-                        value={[input.name].value}
+                        value={data[input.name].value}
                         as={input.as || undefined}
                         rows={input.rows || undefined}
                         onChange={(e)=>handleChange(e.target)}
 
                     />
-                    <Form.Text style={{marginTop:"10px", marginLeft:"200px", color:"red"}}>{[input.name].error}</Form.Text>
+                    <Form.Text style={{marginTop:"10px", marginLeft:"200px", color:"red"}}>{data[input.name].error}</Form.Text>
                 </Form.Group>
                 
             )
@@ -104,7 +113,8 @@ const inputs = [
 
 const mapStateToProps = (state) => {
  return{
-    errorMessage:state.contactformState.errorMessage,
+    errorMessage:state.globalState.errorMessage,
+    successMessage:state.globalState.successMessage,
     isOpenSpinner:state.globalState.isOpenSpinner,
     data:{
         name:state.contactformState.name,
