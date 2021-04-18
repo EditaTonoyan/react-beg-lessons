@@ -1,4 +1,6 @@
 import Types from '../actionTypes';
+import GetDate from '../../Helpers/GetDate';
+
 
 const initialState = {
         title: "",
@@ -22,8 +24,6 @@ const addTaskModalReduser = (state = initialState, action) => {
         }
 
         case Types.SET_DATA:{
-            const{date} = action
-            console.log(date)
              return{
                 ...state,
                 date:action.date

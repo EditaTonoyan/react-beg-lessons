@@ -20,6 +20,8 @@ const Task = ({
                 toggleStatus,
                 ...props}) => {
 
+                    // console.log(task.date)
+
         const classes = [];
         if(isChecked){
             classes.push(styles.disabled)

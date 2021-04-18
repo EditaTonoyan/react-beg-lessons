@@ -8,33 +8,22 @@ import {connect} from 'react-redux';
 import {changeModalThunk,setDataModalThunk} from '../../redux/action'
 
 class AddEditTaskModal extends React.Component{
-//   constructor(props) {
-//     super(props);
-//     this.inputRef = createRef();
-//   //   this.state = {
-//   //     // ...props.editableTask,
-//   //     // date: props.editableTask ? new Date(props.editableTask.date): new Date()
-//   // }
-// }
 
-// setDate = (date) => {
-//   this.setState({
-//       date
-     
-//   });
-// }
 handleSub = ({ key, type}) => {
 
-  const { title, description,date } = this.props;
+  const { title, description, date} = this.props;
+  const actionDate = GetDate(date)
+  
+  
   if (!title ||
       !description ||
       (type === 'keypress' && key !== 'Enter')
   )
       return;
-      const formData ={
+      const formData = {
        title,
        description,
-      date
+       actionDate
       }
   this.props.onSubmit(formData);
   // this.props.onHide();
@@ -49,9 +38,9 @@ handleSub = ({ key, type}) => {
      render(){   
      
       const {onHide, editableTask, title, description, _id} = this.props;
-      const date = editableTask ? new Date(editableTask.date): new Date()
 
-      // const{_id} = this.state
+      const date1 = editableTask ? new Date(editableTask.date): new Date()
+      //console.log(GetDate(date1))
       return(
       <Modal
       onHide = {onHide}
@@ -91,7 +80,7 @@ handleSub = ({ key, type}) => {
               <DatePicker 
                   
                   selected={this.props.date} 
-                  onChange={(date)=>this.props.setDate(date)} 
+                  onChange={(date1)=>this.props.setDate(date1)} 
               
               />
             </Form.Group>
@@ -126,7 +115,8 @@ handleSub = ({ key, type}) => {
 const mapStateToProps = (state) => {
   return{
     title:state.addTaskModalState.title,
-    description:state.addTaskModalState.description
+    description:state.addTaskModalState.description,
+    date:state.addTaskModalState.date
   }
 }
 
@@ -135,8 +125,8 @@ const mapDispatchToProps = (dispatch) => {
     handleChange:(task) => {
       dispatch((dispatch) => changeModalThunk(dispatch, task))
     } ,
-    setDate:(date) => {
-      dispatch((dispatch) => setDataModalThunk(dispatch, date))
+    setDate:(date1) => {
+      dispatch((dispatch) => setDataModalThunk(dispatch, date1))
     }
   }
 }
