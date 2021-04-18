@@ -238,3 +238,12 @@ export const toggleStatusThunk = (dispatch, task) => {
        
         });
 }
+//AddTaskModal
+export const changeModalThunk = (dispatch, target) => {
+    // console.log(target)
+    dispatch({type:Types.CHANGE_MODAL, target})
+}
+
+export const setDataModalThunk = (dispatch, date) => {
+    dispatch({type:Types.SET_DATA, date})
+}

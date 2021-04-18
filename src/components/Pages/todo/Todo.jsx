@@ -132,7 +132,9 @@ useEffect(() => {
                         onSubmit={props.editTask}
                         editableTask={editableTask}
                     />
+                   
                 }
+              
 
                 {isOpenSpinner &&  <Spinner/>}
             </div>

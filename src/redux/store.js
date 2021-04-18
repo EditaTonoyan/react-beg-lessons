@@ -5,15 +5,17 @@ import globalReduser from './redusers/globalReduser';
 import toDoReduser from './redusers/toDoReduser';
 import logger from 'redux-logger'
 import contactFormReduser from './redusers/contactFormReduser';
+import addTaskModalReduser from './redusers/addTaskModalReduser'
 
 const reduser = combineReducers({
     singleTaskState:singleTaskReduser,
     toDoState:toDoReduser,
     globalState:globalReduser,
-    contactformState:contactFormReduser
+    contactformState:contactFormReduser,
+    addTaskModalState:addTaskModalReduser
 })
 
 
-const store = createStore(reduser,applyMiddleware(thunk,logger));
+const store = createStore(reduser,applyMiddleware(thunk));
 window.store = store;
 export default store;

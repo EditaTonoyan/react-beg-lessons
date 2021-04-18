@@ -56,12 +56,7 @@ let minLength6 = minLength(1)
             }
               
             }
-            // case Types.ERROR_MESSAGE:{
-            //     return{
-            //          ...state,
-            //          errorMessage:action.errorMessage
-            //     }
-            // }
+
              case Types.RESET_FORM:{
                 return{
                     ...initialState
