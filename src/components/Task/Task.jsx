@@ -20,8 +20,8 @@ const Task = ({
                 toggleStatus,
                 ...props}) => {
 
-                    // console.log(task.date)
 
+        const taskDate = task.date.slice(0,10)
         const classes = [];
         if(isChecked){
             classes.push(styles.disabled)
@@ -47,7 +47,7 @@ const Task = ({
                             </Link>
                         </Card.Title>
                         <Card.Text  style={{color:"#495057"}} className="mb-3">{task.description}</Card.Text>
-                        <Card.Text  style={{color:"#495057"}} className="mb-3">{task.date.slice(0,10)}</Card.Text>
+                        <Card.Text  style={{color:"#495057"}} className="mb-3">{taskDate}</Card.Text>
                         
                         <Button
                             variant="outline-danger"

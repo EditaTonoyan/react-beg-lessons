@@ -26,6 +26,7 @@ const toDoReduser = (state = initialState, action) => {
         case Types.ADD_TASK:{
             const task = [...state.task];
             task.push(action.data);
+           
             
             return {
                 ...state,
@@ -55,6 +56,7 @@ const toDoReduser = (state = initialState, action) => {
             }
         }
         case Types.EDIT_TASK:{
+            
                 const task = [...state.task];
                 const idx = task.findIndex(task => task._id === action.data._id);
                 task[idx] = action.data;

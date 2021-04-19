@@ -18,13 +18,15 @@ import {
     } from '../../../redux/action';
 
 const Todo = (props) => {
+
+
 useEffect(() => {
     props.setTask()
     return () => {
         props.resretData()
     }
 }, [])
-    
+
         const {
                 task,
                 isOpenAddTaskModal,
@@ -36,6 +38,8 @@ useEffect(() => {
                 toggleStatus
                 
             } = props
+
+          console.log("todo",editableTask)
         const newTask = task.map(task => {
             return (<Col 
                         className = "mt-3"
@@ -177,6 +181,7 @@ const mapDispatchToProps = (dispatch) =>{
         dispatch((dispatch) => deleteOneTask(dispatch, _id))
        },
        editTask:(editableTask) => {
+       
         dispatch((dispatch)=> editTaskThunk(dispatch, editableTask))
        },
     

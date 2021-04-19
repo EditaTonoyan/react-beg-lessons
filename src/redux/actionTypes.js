@@ -26,4 +26,5 @@ export default Object.freeze({
     //TASK MODAL
     CHANGE_MODAL:"CHANGE_MODAL",
     SET_DATA:"SET_DATA",
+    RESET_MODAL_DATA:"RESET_MODAL_DATA"
 });

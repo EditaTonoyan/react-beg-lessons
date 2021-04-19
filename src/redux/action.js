@@ -134,7 +134,7 @@ export const deleteCheckedTask = (dispatch, checkedTasks) => {
     })
 }
 export const editTaskThunk = async(dispatch, editableTask, page= "todo") => {
-   
+   console.log(editableTask)
     try{
         const _id = editableTask._id
         dispatch({type:Types.SET_OR_REMOVE_SPINNER, isOpenSpinner:true})
@@ -145,6 +145,7 @@ export const editTaskThunk = async(dispatch, editableTask, page= "todo") => {
                 "Content-Type": "application/json"
             }
         });
+        
         const data = await res.json();
         if(data.error){
             throw data.error
@@ -158,17 +159,13 @@ export const editTaskThunk = async(dispatch, editableTask, page= "todo") => {
             }else if(page === "todo"){
             dispatch({type:Types.EDIT_TASK, data})
             dispatch({type:Types.SUCCESS_MESSAGE, successMessage:"task edited successfuly"})
-
-                
-
                
             }
-            dispatch({type:Types.EDIT_TASK, data})
         }
     
         }catch( error)  {
             dispatch({type:Types.ERROR_MESSAGE, errorMessage: error.message})
-
+           
 
         }finally{
             dispatch({type:Types.SET_OR_REMOVE_SPINNER, isOpenSpinner:false})
@@ -240,10 +237,11 @@ export const toggleStatusThunk = (dispatch, task) => {
 }
 //AddTaskModal
 export const changeModalThunk = (dispatch, target) => {
-    // console.log(target)
+    
     dispatch({type:Types.CHANGE_MODAL, target})
 }
 
-export const setDataModalThunk = (dispatch, date) => {
-    dispatch({type:Types.SET_DATA, date})
+export const setDataModalThunk = (dispatch, actionData) => {
+    console.log(actionData)
+    dispatch({type:Types.SET_DATA, actionData})
 }

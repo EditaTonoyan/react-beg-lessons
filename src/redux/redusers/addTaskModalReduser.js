@@ -1,13 +1,10 @@
 import Types from '../actionTypes';
-import GetDate from '../../Helpers/GetDate';
-
 
 const initialState = {
         title: "",
         description: "",
-        date:new Date()
-
-        
+        date:new Date(),
+        // ...editableTask
 }
 
 
@@ -26,10 +23,13 @@ const addTaskModalReduser = (state = initialState, action) => {
         case Types.SET_DATA:{
              return{
                 ...state,
-                date:action.date
+                date:action.actionData
             }
-            
-
+        }
+        case Types.RESET_MODAL_DATA:{
+            return{
+                ...initialState
+            }
         }
         default: return state
     }

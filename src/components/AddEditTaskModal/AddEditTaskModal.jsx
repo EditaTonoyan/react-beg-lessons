@@ -1,4 +1,4 @@
-import React,  { createRef } from 'react';
+import {useEffect, useRef} from 'react';
 import{Button, Modal,FormControl,Form} from 'react-bootstrap';
 import styles from './AddEditTaskModal.module.css';
 import PropTypes from 'prop-types';
@@ -6,13 +6,16 @@ import DatePicker from "react-datepicker";
 import GetDate from '../../Helpers/GetDate';
 import {connect} from 'react-redux';
 import {changeModalThunk,setDataModalThunk} from '../../redux/action'
+import Types from '../../redux/actionTypes';
 
-class AddEditTaskModal extends React.Component{
+const AddEditTaskModal = (props) => {
 
-handleSub = ({ key, type}) => {
+const inpRef = useRef(null)
 
-  const { title, description, date} = this.props;
-  const actionDate = GetDate(date)
+
+const handleSub = ({ key, type}) => {
+  const { title, description, actionDate} = props;
+  const date = GetDate(actionDate)
   
   
   if (!title ||
@@ -23,24 +26,23 @@ handleSub = ({ key, type}) => {
       const formData = {
        title,
        description,
-       actionDate
+       date
       }
-  this.props.onSubmit(formData);
-  // this.props.onHide();
+  props.onSubmit(formData);
+  
 }
 
-        
+    useEffect(() => {
+      inpRef.current.focus();
+      return () => {
+        props.resetData()
+      }
+    }, [])
+  
           
-        // componentDidMount() {
-        //   this.inputRef.current.focus();
-        // }
-
-     render(){   
+      const {onHide, editableTask, title, description, actionDate} = props;
+     console.log(editableTask); 
      
-      const {onHide, editableTask, title, description, _id} = this.props;
-
-      const date1 = editableTask ? new Date(editableTask.date): new Date()
-      //console.log(GetDate(date1))
       return(
       <Modal
       onHide = {onHide}
@@ -56,13 +58,12 @@ handleSub = ({ key, type}) => {
       </Modal.Header>
       <Modal.Body>
             <FormControl 
-                ref={this.inputRef}
+                ref={inpRef}
                 name='title'
                 type='text'
-                onChange={(event) => this.props.handleChange(event.target)}
-               // value={this.state.inputValue}
+                onChange={(event) => props.handleChange(event.target)}
                 className={styles.input}
-                onKeyPress={this.handleSub}
+                onKeyPress={handleSub}
                 placeholder="Title"
                 value={title}
               />
@@ -70,7 +71,7 @@ handleSub = ({ key, type}) => {
                 style={{resize:"none"}}
                 name='description'
                 placeholder="description"
-                onChange={(event) => this.props.handleChange(event.target)}
+                onChange={(event) => props.handleChange(event.target)}
                 className={styles.input }
                 as="textarea" 
                 rows={3}
@@ -79,8 +80,8 @@ handleSub = ({ key, type}) => {
             <Form.Group>
               <DatePicker 
                   
-                  selected={this.props.date} 
-                  onChange={(date1)=>this.props.setDate(date1)} 
+                  selected={ actionDate} 
+                  onChange={(date)=>props.setDate(date)} 
               
               />
             </Form.Group>
@@ -94,18 +95,19 @@ handleSub = ({ key, type}) => {
             Close
         </Button>
         <Button
-        onClick={this.handleSub} 
+        onClick={handleSub} 
         disabled = {!title || !description}
         >
-            {_id === '' ? 'Add' : 'Save'}
+            {editableTask ? 'Save' : 'Add'}
             
         </Button>
       </Modal.Footer>
     </Modal>
+
       )
     }
     
-}
+
 
  AddEditTaskModal.propTypes = {
    onHide:PropTypes.func,
@@ -116,7 +118,7 @@ const mapStateToProps = (state) => {
   return{
     title:state.addTaskModalState.title,
     description:state.addTaskModalState.description,
-    date:state.addTaskModalState.date
+    actionDate:state.addTaskModalState.date
   }
 }
 
@@ -125,9 +127,12 @@ const mapDispatchToProps = (dispatch) => {
     handleChange:(task) => {
       dispatch((dispatch) => changeModalThunk(dispatch, task))
     } ,
-    setDate:(date1) => {
-      dispatch((dispatch) => setDataModalThunk(dispatch, date1))
-    }
+    setDate:(date) => {
+      dispatch((dispatch) => setDataModalThunk(dispatch, date))
+    },
+     resetData:() => {
+       dispatch({type:Types.RESET_MODAL_DATA})
+     }
   }
 }
 
