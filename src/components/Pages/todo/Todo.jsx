@@ -14,7 +14,7 @@ import {
         deleteOneTask,
         deleteCheckedTask,
         editTaskThunk,
-        toggleStatusThunk
+        toggleStatusThunk,
     } from '../../../redux/action';
 
 const Todo = (props) => {
@@ -38,8 +38,7 @@ useEffect(() => {
                 toggleStatus
                 
             } = props
-
-          console.log("todo",editableTask)
+            
         const newTask = task.map(task => {
             return (<Col 
                         className = "mt-3"
@@ -181,7 +180,6 @@ const mapDispatchToProps = (dispatch) =>{
         dispatch((dispatch) => deleteOneTask(dispatch, _id))
        },
        editTask:(editableTask) => {
-       
         dispatch((dispatch)=> editTaskThunk(dispatch, editableTask))
        },
     
@@ -205,7 +203,7 @@ const mapDispatchToProps = (dispatch) =>{
        },
        resretData: () => {
         dispatch({type:Types.RESET_DADA})
-       } 
+       }
       
        
 }

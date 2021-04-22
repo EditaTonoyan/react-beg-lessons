@@ -41,6 +41,7 @@ export const getTaskThunk = (dispatch) => {
             })
 }
 export const addToDoTask = (dispatch, formData) => {
+    console.log(formData)
     dispatch({type:Types.SET_OR_REMOVE_SPINNER, isOpenSpinner:true})
 
     fetch(`${API_HOST}/task`,{
@@ -134,9 +135,10 @@ export const deleteCheckedTask = (dispatch, checkedTasks) => {
     })
 }
 export const editTaskThunk = async(dispatch, editableTask, page= "todo") => {
-   console.log(editableTask)
+    console.log(editableTask)
     try{
         const _id = editableTask._id
+        
         dispatch({type:Types.SET_OR_REMOVE_SPINNER, isOpenSpinner:true})
         const res = await fetch (`${API_HOST}/task/${_id}`,{
             method:"PUT",
@@ -241,7 +243,12 @@ export const changeModalThunk = (dispatch, target) => {
     dispatch({type:Types.CHANGE_MODAL, target})
 }
 
-export const setDataModalThunk = (dispatch, actionData) => {
-    console.log(actionData)
-    dispatch({type:Types.SET_DATA, actionData})
+export const setDataModalThunk = (dispatch, date) => {
+
+    dispatch({type:Types.SET_DATA, date})
+}
+export const resetTaskModalstateThunk = (dispatch, editableTask) => {
+    dispatch({type:Types.RESET_EDITABLE_TASK, editableTask})
+    console.log("from action",editableTask.date)
+  
 }

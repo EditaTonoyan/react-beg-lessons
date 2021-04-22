@@ -1,48 +1,48 @@
-import {useEffect, useRef} from 'react';
+import  { useEffect, useRef } from 'react';
 import{Button, Modal,FormControl,Form} from 'react-bootstrap';
 import styles from './AddEditTaskModal.module.css';
 import PropTypes from 'prop-types';
 import DatePicker from "react-datepicker";
 import GetDate from '../../Helpers/GetDate';
 import {connect} from 'react-redux';
-import {changeModalThunk,setDataModalThunk} from '../../redux/action'
-import Types from '../../redux/actionTypes';
+import {changeModalThunk,setDataModalThunk, resetTaskModalstateThunk} from '../../redux/action'
+import Types from '../../redux/actionTypes'
 
 const AddEditTaskModal = (props) => {
 
+  const {
+    onHide,
+    editableTask,
+   
+  } = props;
+  const {
+    title,
+    description, 
+    date} = props.state
 const inpRef = useRef(null)
-
-
-const handleSub = ({ key, type}) => {
-  const { title, description, actionDate} = props;
-  const date = GetDate(actionDate)
-  
-  
+const handleSub = ({ key, type }) => {
   if (!title ||
       !description ||
       (type === 'keypress' && key !== 'Enter')
   )
       return;
-      const formData = {
-       title,
-       description,
-       date
+      const formData ={
+        ...props.state,
+        date:GetDate(date)
+      
       }
-  props.onSubmit(formData);
-  
+
+ props.onSubmit(formData);
 }
 
-    useEffect(() => {
-      inpRef.current.focus();
-      return () => {
-        props.resetData()
-      }
-    }, [])
-  
-          
-      const {onHide, editableTask, title, description, actionDate} = props;
-     console.log(editableTask); 
-     
+        
+useEffect(() => {
+ editableTask && props.resetTaskModalState(editableTask)
+  inpRef.current.focus();
+  return () => {
+    props.resetData()
+  }
+}, [])
       return(
       <Modal
       onHide = {onHide}
@@ -52,16 +52,16 @@ const handleSub = ({ key, type}) => {
       centered
       >
       <Modal.Header closeButton>
-        <Modal.Title id="contained-modal-title-vcenter">
+        <Modal.Title>
         {editableTask ? "Edit Task Modal" : "Add Task Modal"}
         </Modal.Title>
       </Modal.Header>
       <Modal.Body>
             <FormControl 
-                ref={inpRef}
+                 ref={inpRef}
                 name='title'
                 type='text'
-                onChange={(event) => props.handleChange(event.target)}
+                onChange={(e) => props.handleChange(e.target)}
                 className={styles.input}
                 onKeyPress={handleSub}
                 placeholder="Title"
@@ -71,20 +71,18 @@ const handleSub = ({ key, type}) => {
                 style={{resize:"none"}}
                 name='description'
                 placeholder="description"
-                onChange={(event) => props.handleChange(event.target)}
+                onChange={(e) => props.handleChange(e.target)}
                 className={styles.input }
                 as="textarea" 
                 rows={3}
                 value={description}
             />
-            <Form.Group>
-              <DatePicker 
-                  
-                  selected={ actionDate} 
-                  onChange={(date)=>props.setDate(date)} 
-              
-              />
-            </Form.Group>
+             <Form.Group >
+                        <DatePicker
+                            // selected={date}
+                            onChange={(date) => props.setDate(date)}
+                        />
+              </Form.Group>
               
       </Modal.Body>
       <Modal.Footer>
@@ -98,14 +96,13 @@ const handleSub = ({ key, type}) => {
         onClick={handleSub} 
         disabled = {!title || !description}
         >
-            {editableTask ? 'Save' : 'Add'}
+            {editableTask === '' ? 'Add' : 'Save'}
             
         </Button>
       </Modal.Footer>
     </Modal>
-
       )
-    }
+  }
     
 
 
@@ -115,25 +112,26 @@ const handleSub = ({ key, type}) => {
    handleSubmit:PropTypes.func,
 }
 const mapStateToProps = (state) => {
-  return{
-    title:state.addTaskModalState.title,
-    description:state.addTaskModalState.description,
-    actionDate:state.addTaskModalState.date
-  }
+  return {
+    state: state.addTaskModalState
+}
 }
 
 const mapDispatchToProps = (dispatch) => {
-  return {
+  return{
     handleChange:(task) => {
       dispatch((dispatch) => changeModalThunk(dispatch, task))
     } ,
     setDate:(date) => {
       dispatch((dispatch) => setDataModalThunk(dispatch, date))
     },
-     resetData:() => {
-       dispatch({type:Types.RESET_MODAL_DATA})
-     }
+    resetData:() => {
+      dispatch({type:Types.RESET_MODAL_DATA})
+
+    },
+    resetTaskModalState:(editableTask) => {
+      dispatch((dispatch) =>resetTaskModalstateThunk(dispatch, editableTask))
+    }
   }
 }
-
 export default connect(mapStateToProps, mapDispatchToProps)(AddEditTaskModal)

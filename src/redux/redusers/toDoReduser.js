@@ -4,8 +4,8 @@ const initialState = {
     task:[],
     isOpenAddTaskModal:false,
     isOpenDeleteTaskModal:false,
-    editableTask:'',
     checkedTasks:new Set(),
+    editableTask:null,
     oneCheckedTask:null
 }
 
@@ -68,12 +68,7 @@ const toDoReduser = (state = initialState, action) => {
 
                 }   
         }
-        case Types.TOGGLE_SET_EDITABLE_TASK:{
-            return{
-            ...state,
-                editableTask:action.data
-            }
-        }
+       
         case Types.CHECKED_TASKS:{
            const {_id} = action;
             let checkedTasks = new Set(state.checkedTasks);
@@ -115,6 +110,12 @@ const toDoReduser = (state = initialState, action) => {
                     checkedTasks
             }
     
+        }
+        case Types.TOGGLE_SET_EDITABLE_TASK:{
+            return{
+            ...state,
+                editableTask:action.data
+            }
         }
         case Types.RESET_DADA:{
             return{

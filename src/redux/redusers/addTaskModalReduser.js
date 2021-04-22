@@ -1,16 +1,23 @@
 import Types from '../actionTypes';
 
 const initialState = {
-        title: "",
-        description: "",
-        date:new Date(),
-        // ...editableTask
-}
+    title: "",
+    description: "",
+    date:new Date(),
 
+}
 
 const addTaskModalReduser = (state = initialState, action) => {
     switch(action.type){
-        case Types.CHANGE_MODAL:{
+        case Types.RESET_EDITABLE_TASK:{      
+            return{
+                ...state,
+                date: new Date(action.editableTask.date),
+                ...action.editableTask
+               
+            }
+        }
+         case Types.CHANGE_MODAL:{
             const {value, name} = action.target
 
             return{
@@ -23,7 +30,8 @@ const addTaskModalReduser = (state = initialState, action) => {
         case Types.SET_DATA:{
              return{
                 ...state,
-                date:action.actionData
+                date:action.date
+
             }
         }
         case Types.RESET_MODAL_DATA:{
@@ -31,10 +39,9 @@ const addTaskModalReduser = (state = initialState, action) => {
                 ...initialState
             }
         }
+
         default: return state
     }
     
 }
-
-
 export default addTaskModalReduser
