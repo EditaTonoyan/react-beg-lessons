@@ -6,6 +6,7 @@ import { Col, Container, Row, Button} from 'react-bootstrap';
 import AddEditTaskModal from '../../AddEditTaskModal/AddEditTaskModal'
 import ConfirModal from '../../deleteTaskModal/ConfirModal';
 import Spinner from '../SingleTaskPage/Spinner/Spinner';
+import Search from '../../Search/Search'
 import {connect} from 'react-redux';
 import Types from '../../../redux/actionTypes';
 import {
@@ -64,6 +65,8 @@ useEffect(() => {
         return (
             <div className = {styles.body}>
             <Container >
+                
+               
                 <Row>
                     <Col>
                         <h1 className={styles.header}>My ToDo List</h1>
@@ -71,6 +74,11 @@ useEffect(() => {
                     
                 </Row>
 
+                <Row>
+                    <Col>
+                        <Search/>
+                    </Col>
+                </Row>
                 <Row>
                     <Col>
                         <Button

@@ -5,14 +5,16 @@ import globalReduser from './redusers/globalReduser';
 import toDoReduser from './redusers/toDoReduser';
 import logger from 'redux-logger'
 import contactFormReduser from './redusers/contactFormReduser';
-import addTaskModalReduser from './redusers/addTaskModalReduser'
+import addTaskModalReduser from './redusers/addTaskModalReduser';
+import searchReducer from './redusers/searchReducer'
 
 const reduser = combineReducers({
     singleTaskState:singleTaskReduser,
     toDoState:toDoReduser,
     globalState:globalReduser,
     contactformState:contactFormReduser,
-    addTaskModalState:addTaskModalReduser
+    addTaskModalState:addTaskModalReduser,
+    searchState:searchReducer
 })
 
 

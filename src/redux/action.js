@@ -249,6 +249,64 @@ export const setDataModalThunk = (dispatch, date) => {
 }
 export const resetTaskModalstateThunk = (dispatch, editableTask) => {
     dispatch({type:Types.RESET_EDITABLE_TASK, editableTask})
-    console.log("from action",editableTask.date)
   
 }
+//SEARCH
+export const setDropdownValueThunk = (dispatch,name, value) => {
+    dispatch({type:Types.SET_DROPDOWN_VALUE, name, value})
+  
+}
+export const changeSearchInputThunk = (dispatch,target) => {
+    dispatch({type:Types.CHANGE_SEARCH_INPUT, target})
+  
+}
+export const setSearchDateThunk = (dispatch,searchInput, date) => {
+    dispatch({type:Types.SET_SEARCH_DATE, searchInput, date})
+  
+}
+export const resetSearchDataThunk = (dispatch) => {
+    dispatch({type:Types.RESET_SEARCH_DATA})
+  
+}
+export const submitSearcValuesThunk = (dispatch, formData) => {
+    let formDatas = {...formData}
+   
+    let query = "?"
+    for (let key in formDatas){
+        const value = formDatas[key]
+        if(!value) {
+          delete formDatas[key]
+        }else{
+            query +=  key + "=" + value + "&";
+        }
+        
+        
+    }
+    if(Object.keys(formDatas).length){
+    dispatch({type:Types.SET_OR_REMOVE_SPINNER, isOpenSpinner:true})
+        fetch(`${API_HOST}/task${query.slice(0, query.length - 1)}`)
+       
+        .then(res => res.json())
+        .then(data => {
+            if (data.error)
+                throw data.error;
+               
+                dispatch({type:Types.SET_TASKS, data})
+                dispatch({type:Types.RESET_SEARCH_DATA})
+
+        })
+        .catch(error => {
+         dispatch({type:Types.ERROR_MESSAGE, errorMessage: error.message})
+         })
+         .finally(() => {
+            dispatch({ type: Types.SET_OR_REMOVE_SPINNER, isOpenSpinner: false }); 
+        })
+
+       
+
+    }
+    
+  
+}
+
+
