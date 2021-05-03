@@ -16,6 +16,7 @@ import {
         deleteCheckedTask,
         editTaskThunk,
         toggleStatusThunk,
+        resetGlobalStatedata
     } from '../../../redux/action';
 
 const Todo = (props) => {
@@ -65,15 +66,15 @@ useEffect(() => {
         return (
             <div className = {styles.body}>
             <Container >
-                
-               
                 <Row>
                     <Col>
-                        <h1 className={styles.header}>My ToDo List</h1>
+                        <h1 > TODO LIST</h1>
                     </Col>
                     
                 </Row>
+            </Container >
 
+            <Container style={{backgroundColor:"rgba(60, 139, 120, .3)", padding:"15px"}}>
                 <Row>
                     <Col>
                         <Search/>
@@ -120,8 +121,9 @@ useEffect(() => {
                         }
                     </Button>
 
-                </Row>                
+                </Row>  
             </Container>
+
 
             {isOpenDeleteTaskModal && <ConfirModal
                                           onHide = {props.toggleOpenDeleteTaskModal}
@@ -212,6 +214,7 @@ const mapDispatchToProps = (dispatch) =>{
        resretData: () => {
         dispatch({type:Types.RESET_DADA})
        }
+       
       
        
 }

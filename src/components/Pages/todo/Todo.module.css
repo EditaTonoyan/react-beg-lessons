@@ -11,7 +11,7 @@
     clear: both;
   }
 
-  ul {
+  /* ul {
     margin: 0;
     padding: 0;
   }
@@ -30,12 +30,12 @@
     -moz-user-select: none;
     -ms-user-select: none;
     user-select: none;
-  }
-  .body {
+  } */
+  /* .body {
     height: 100%;
     color: #61DAFB;
     background: #d5eceb;
-  }
+  } */
   /* Set all odd list items to a different color (zebra-stripes) */
 
 

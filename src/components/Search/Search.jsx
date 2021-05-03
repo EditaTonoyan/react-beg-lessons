@@ -2,6 +2,8 @@
  import {useEffect} from 'react';
  import {connect} from 'react-redux';
  import DatePicker from "react-datepicker";
+ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { search} from '@fortawesome/free-solid-svg-icons';
 
  import {
         setDropdownValueThunk,
@@ -16,7 +18,9 @@
      InputGroup,
      DropdownButton,
      Dropdown,
+     FormControl
     } from 'react-bootstrap';
+import { Label } from 'reactstrap';
 
 const sortVariants = [
     
@@ -106,67 +110,96 @@ const Search = (props) => {
     })
     return(
         <div>
-            <div>
-                <InputGroup className="mb-3">
-                    <Form.Control 
+            <div className="row">
+
+            {/* <Form.Group controlId="formBasicEmail">
+                <Form.Control 
                     type="search" 
-                    placeholder="search"
+                    placeholder="Search"
                     onChange={(e) => handleChange(e.target)}
                     value={search}
-                    />
-                </InputGroup >
+                />
+
+            </Form.Group> */}
+  
+            <input
+                type="search" 
+                placeholder="Search"
+                onChange={(e) => handleChange(e.target)}
+                value={search} 
+                style={{height:'30px', width:'70%', marginLeft: '15px'}}
+            >
+
+            </input>
+
+              
                 
-                <InputGroup className="mt-3 d-flex justify-content-center">
-                <DropdownButton title={sort ? sortVariants.find(i => i.value === sort).label : "sort"}>
+                <InputGroup className="mb-3 d-flex justify-content-center  col-3 ">
+                <DropdownButton 
+                    title={sort ? sortVariants.find(i => i.value === sort).label : "sort"}
+                    variant="secondary"
+                >
                     {sortValues}
                 </DropdownButton>
 
-                <DropdownButton   className="ml-3" title={status ? statusVariants.find(i => i.value === status).label :"status"}>
+                <DropdownButton   
+                    className="ml-3" title={status ? statusVariants.find(i => i.value === status).label :"status"}
+                    variant="secondary"
+                >
                     {statusValues}
                 </DropdownButton>
                 </InputGroup>
-                <Form.Group className="mt-3 d-flex justify-content-center">
-                        <p  style={{color:"black", marginRight:"10%"}}>Created late</p>
-                        <p style={{color:"black", marginLeft:"5%"}}>Created Greater</p>
-              </Form.Group>
-                <Form.Group className="mt-3 d-flex justify-content-center">
+                <Form.Group className="mt-3 d-flex justify-content-center row col-5">
+                    <div>
                         <DatePicker
-                                
-                             selected={create_lte}
-                             onChange={(date) => setDate("create_lte", date)}
+                            placeholderText="Created late"
+                            selected={create_lte}
+                            onChange={(date) => setDate("create_lte", date)}
                         />
+                    </div>
+                    <div>
+                    
                         <DatePicker
+                            placeholderText="Created Greater"
                             className="ml-3"
                             selected={create_gte}
                             onChange={(date) => setDate("create_gte",date)}
                         />
+                    </div>
+                        
               </Form.Group>
-              <Form.Group className="mt-3 d-flex justify-content-center">
-                        <p  style={{color:"black", marginRight:"10%"}}>Complete late</p>
-                        <p style={{color:"black", marginLeft:"5%"}}>Complete Greater</p>
-              </Form.Group>
-              <Form.Group  className="mt-3 d-flex justify-content-center">
+              <Form.Group  className="mt-3 d-flex justify-content-center row col-5">
+                <div>
+                    
+                     <DatePicker
+                        placeholderText="Complete late"
+                        selected={complete_lte}
+                        onChange={(date) => setDate("complete_lte",date)}
+                     />
+                </div>
+                <div>
                         <DatePicker
-                            selected={complete_lte}
-                            onChange={(date) => setDate("complete_lte",date)}
-                        />
-             
-                        <DatePicker
+                            placeholderText="Complete Greater"
                             className="ml-3"
-
                             selected={complete_gte}
                             onChange={(date) => setDate("complete_gte",date)}
                         />
-              </Form.Group>
+                </div>
 
-                <Button
+                        
+              </Form.Group>
+            <div className="col-2 d-flex justify-content-center align-items-center">
+            <Button 
+                
                 onClick={() => handleSubmit(props.state)}
                  variant="primary"
                  type="submit"
-                 style={{marginLeft:"48%", marginBottom:"5%"}}
+                 style={{height:"36px",top: "5px", position: "relative"}}
                 >
                     Filter
                 </Button>
+            </div>
+                
             </div>
         </div>
     )

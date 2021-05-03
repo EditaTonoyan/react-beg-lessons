@@ -251,6 +251,11 @@ export const resetTaskModalstateThunk = (dispatch, editableTask) => {
     dispatch({type:Types.RESET_EDITABLE_TASK, editableTask})
   
 }
+export const resetGlobalStatedata = (dispatch) => {
+    dispatch({type:Types.RESET_GLOBAL_REDUSER_DATA})
+
+    
+}
 //SEARCH
 export const setDropdownValueThunk = (dispatch,name, value) => {
     dispatch({type:Types.SET_DROPDOWN_VALUE, name, value})

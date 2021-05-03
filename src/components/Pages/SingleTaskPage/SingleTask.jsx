@@ -28,10 +28,10 @@ const SingleTask = (props) => {
         if(singleTask === null) return   <Spinner/>
         return (
             <div>
-                <h1 style={{color:'black'}}>Single Task</h1>
-                <div>
+                <h1 >SINGLE TASK</h1>
+                <div className={"d-flex justify-content-center"}>
                     <Link to="/">
-                    <Button style={{marginLeft:"50%"}}>
+                    <Button>
                          GoBack
                     </Button>
                     </Link>
@@ -42,7 +42,7 @@ const SingleTask = (props) => {
                     <p style={{textAlign:'center', fontSize:'25px'}}>Descriptions: {singleTask.description}</p>
                 <div  style={{textAlign:'center', marginTop:'25px'}}> 
                 <Button
-                    variant="danger"
+                   variant="danger"
                     onClick={()=>props.deleteSingleTask(singleTask._id , history )}
                   
                 >
@@ -52,7 +52,7 @@ const SingleTask = (props) => {
                 <Button
            
                 onClick={props.toggleOpenModal}
-                    variant="warning"
+                variant="warning"
                     className="ml-3"
                 >
                 <FontAwesomeIcon  icon={faEdit}/>

@@ -48,6 +48,11 @@ time, mark, audio, video {
 	vertical-align: baseline;
 }
 
+a {
+    text-decoration: none;
+    color:rgb(6, 4, 160)
+}
+
 /* make sure to set some focus styles for accessibility */
 :focus {
     outline: 0;
@@ -63,9 +68,9 @@ body {
 	line-height: 1;
 }
 
-ol, ul {
+/* ol, ul {
 	list-style: none;
-}
+} */
 
 blockquote, q {
 	quotes: none;
@@ -409,13 +414,13 @@ h1 {
   text-align: left;
 }
 
-ul {
+/* ul {
   list-style: none;
 }
 
 ul>li:hover {
   background-color: #F5F5F5;
-}
+} */
 
 .form-inline .form-control {
   width: 50%;

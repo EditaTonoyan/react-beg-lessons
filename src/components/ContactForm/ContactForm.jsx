@@ -83,7 +83,7 @@ const inputs = [
             <div style={{backgroundColor:"rgba(60, 139, 120, .3)"}}>
                 <Form onSubmit={(e)=>e.preventDefault()}
               
-                        style={{maxWidth: "550px", margin: "48px auto 0px"}} 
+                        style={{maxWidth: "550px", margin: "0 auto ", padding:"20px"}} 
                 >
                     {errorMessage &&
                     <p className={styles.errorMessage} >

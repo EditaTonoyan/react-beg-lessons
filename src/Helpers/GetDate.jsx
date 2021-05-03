@@ -1,3 +1,3 @@
 export default function GetDate(date) {
-    return date.toISOString().slice(0,10);
+    return date.slice(0,10);
 }

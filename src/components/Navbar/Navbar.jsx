@@ -28,7 +28,7 @@ export default function Navbar() {
             <NavLink 
                 to={navlink.to}
                 className="nav-link"
-                activeStyle={{color:'red'}}
+                // activeStyle={{color:'red'}}
                 exact={navlink.exact}
              >
                  {navlink.value}

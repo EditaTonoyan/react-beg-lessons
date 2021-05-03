@@ -18,7 +18,10 @@ const AddEditTaskModal = (props) => {
   const {
     title,
     description, 
-    date} = props.state
+    date
+  } = props.state
+
+  console.log(date)
 const inpRef = useRef(null)
 const handleSub = ({ key, type }) => {
   if (!title ||
@@ -68,7 +71,7 @@ useEffect(() => {
                 value={title}
               />
             <Form.Control 
-                style={{resize:"none"}}
+                style={{resize:"none", marginBottom:'10px'}}
                 name='description'
                 placeholder="description"
                 onChange={(e) => props.handleChange(e.target)}
@@ -77,9 +80,10 @@ useEffect(() => {
                 rows={3}
                 value={description}
             />
-             <Form.Group >
+             <Form.Group  >
                         <DatePicker
-                            // selected={date}
+                        
+                            selected={new Date(date)}
                             onChange={(date) => props.setDate(date)}
                         />
               </Form.Group>

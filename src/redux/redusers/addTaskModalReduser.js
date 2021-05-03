@@ -3,7 +3,7 @@ import Types from '../actionTypes';
 const initialState = {
     title: "",
     description: "",
-    date:new Date(),
+    date:new Date().toISOString(),
 
 }
 
@@ -12,7 +12,7 @@ const addTaskModalReduser = (state = initialState, action) => {
         case Types.RESET_EDITABLE_TASK:{      
             return{
                 ...state,
-                date: new Date(action.editableTask.date),
+                date: new Date(action.editableTask),
                 ...action.editableTask
                
             }
@@ -30,7 +30,7 @@ const addTaskModalReduser = (state = initialState, action) => {
         case Types.SET_DATA:{
              return{
                 ...state,
-                date:action.date
+                date:action.date.toISOString()
 
             }
         }

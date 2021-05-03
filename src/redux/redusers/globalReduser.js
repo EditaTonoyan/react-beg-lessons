@@ -26,6 +26,11 @@ const globalReduser = (state = initialState, action) => {
                  successMessage:action.successMessage
             }
         }
+        case Types.RESET_GLOBAL_REDUSER_DATA:{
+            return{
+                ...initialState
+            }
+        }
         default: return state
     }
     

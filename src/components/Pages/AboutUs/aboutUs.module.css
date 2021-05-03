@@ -1,0 +1,35 @@
+.name {
+    margin: 20px 0 15px 0;  
+    padding:30px 40px;
+    color:rgb(19, 18, 18);
+    text-align: center;
+    font-weight: bold;
+    font-size:50px;
+} 
+.professinon {
+    color:rgba(153, 144, 144,.8);
+    font-style: italic;
+    text-align: center;
+    font-weight: bold;
+    font-size:large;
+
+}
+
+.text {
+    color:rgba(153, 144, 144,.8);
+    font-style: italic;
+    font-size:medium; 
+    text-align: center;
+    margin-top:5px;
+}
+
+  .ul {
+    color: rgba(153, 144, 144,.8);
+    font-style: italic;
+    font-size: medium;
+    text-align: left;
+    margin-top: 5px;
+    position: relative;
+    left: 244px;
+    width: fit-content;
+  }
