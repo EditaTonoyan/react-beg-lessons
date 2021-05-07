@@ -6,7 +6,7 @@ import git from '../../../assets/icons/git.png';
 export default function AboutUs() {
 
     return (
-        <>
+        <div style={{backgroundColor:'rgba(225,255,255, .9)'}}>
         <div >
             <p className={styles.name}>Edita Tonoyan</p>
             <p className={styles.professinon}>React developer</p>
@@ -15,7 +15,7 @@ export default function AboutUs() {
                 href="https://www.linkedin.com/in/edita-tonoyan-a081b4211/?fbclid=IwAR0vTyEUXb2ov4zqLSdZCrv-cvDF4hDq7tfrY87K2SkRiD_Xp4AHWBdTwXA"
             >
                  <img src={linkdin} alt="linkedin" 
-                     style={{width:'30px', marginRight:'1200px'}}
+                     style={{width:'30px'}}
                  />
             </a>
 
@@ -23,7 +23,7 @@ export default function AboutUs() {
                 href="https://github.com/EditaTonoyan"
             >
                  <img src={git} alt="gitHub" 
-                     style={{width:'30px', marginRight:'1200px'}}
+                     style={{width:'30px'}}
                  />
             </a>
             
@@ -87,7 +87,9 @@ export default function AboutUs() {
                 <p style={{
                     textAlign:'center',
                     fontWeight: 'bold',
-                    marginTop:'20px'}}>Languages</p>
+                    marginTop:'20px'}}>
+                        Languages
+                </p>
 
                 <ul className={styles.ul}>
                     <li>Armenian    Native</li>
@@ -109,8 +111,14 @@ export default function AboutUs() {
             >
                 Work Experinece
             </p>
-        <div style={{ width:"50%", borderRight:'2px solid rgba(153, 144, 144,.8)', display:'inline-block'}}>
-            <p>
+        <div style={{ 
+                    width:"50%",
+                    borderRight:'2px solid rgba(153, 144, 144,.8)', 
+                    display:'inline-block', 
+                    textAlign:'center',
+                    marginTop:'20px'}}>
+            
+            <p >
                 Yerevan
             </p>
 
@@ -139,7 +147,12 @@ export default function AboutUs() {
             </p>
         </div>
 
-        <div style={{ width:"50%", borderRight:'2px solid rgba(153, 144, 144,.8)', display:'inline-block'}}>
+        <div style={{ 
+                    width:"50%",
+                    borderRight:'2px solid rgba(153, 144, 144,.8)', 
+                    display:'inline-block', 
+                    textAlign:'center',
+                    marginTop:'20px'}}>
             <p>
                 Yerevan
             </p>
@@ -179,7 +192,12 @@ export default function AboutUs() {
                 Education
             </p>
             
-        <div style={{ width:"50%", borderRight:'2px solid rgba(153, 144, 144,.8)', display:'inline-block'}}>
+        <div style={{ 
+                    width:"50%",
+                    borderRight:'2px solid rgba(153, 144, 144,.8)', 
+                    display:'inline-block', 
+                    textAlign:'center',
+                    marginTop:'20px'}}>
             <p>
                 Yerevan
             </p>
@@ -212,6 +230,6 @@ export default function AboutUs() {
         <br/>
         <br/>
         <br/>
-        </>
+        </div>
     )
 }
