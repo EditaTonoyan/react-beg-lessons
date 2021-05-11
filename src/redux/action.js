@@ -1,5 +1,5 @@
 import Types from '../redux/actionTypes'
-const API_HOST = "http://127.0.0.1:5500";
+const API_HOST = "http://localhost:3001";
 
   //*****SINGLETASK*****
 
